@@ -1,4 +1,4 @@
-package engineer.maxbarraclough.txtshuffle;
+package engineer.maxbarraclough.txtshuffle.gui;
 
 import java.net.URL;
 import java.util.ResourceBundle;

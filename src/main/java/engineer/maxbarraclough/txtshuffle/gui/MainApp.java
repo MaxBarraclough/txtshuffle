@@ -1,4 +1,4 @@
-package engineer.maxbarraclough.txtshuffle;
+package engineer.maxbarraclough.txtshuffle.gui;
 
 import javafx.application.Application;
 import static javafx.application.Application.launch;
