@@ -1,5 +1,6 @@
 package engineer.maxbarraclough.txtshuffle.gui;
 
+import java.io.IOException;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
@@ -8,19 +9,39 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 
-public class MainApp extends Application {
+public final class MainApp extends Application {
 
+    protected final Scene rootScene;
+    
+    /**
+     * selectDataSourceScene
+     */
+    protected final Scene sdsScene;
+    
+    
+    public MainApp() throws IOException
+    {
+        Parent rootParent = FXMLLoader.load(getClass().getResource("/fxml/Scene.fxml"));
+        this.rootScene = new Scene(rootParent);
+        this.rootScene.getStylesheets().add("/styles/Styles.css");
+        
+        Parent sdssParent = FXMLLoader.load(getClass().getResource("/fxml/SelectDataSource.fxml"));
+        this.sdsScene = new Scene(sdssParent);
+        this.rootScene.getStylesheets().add("/styles/Styles.css");
+    }
+    
+    
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Scene.fxml"));
-        
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add("/styles/Styles.css");
+//        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Scene.fxml"));
+//        
+//        Scene scene = new Scene(root);
+//        scene.getStylesheets().add("/styles/Styles.css");
         
         stage.setTitle("txtshuffle");
         stage.setResizable(false);
 
-        stage.setScene(scene);
+        stage.setScene(this.rootScene);
         stage.show();
     }
 
