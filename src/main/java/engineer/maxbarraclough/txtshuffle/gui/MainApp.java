@@ -25,11 +25,11 @@ public final class MainApp extends Application {
 
         // This stuff *must* be done here, *not* in 'init' or in ctor,
         // for execution on correct thread https://www.javaworld.com/article/3057072/
-        Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/Scene.fxml"));
-        Scene rootScene = new Scene(rootParent);
+        final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/Scene.fxml"));
+        final Scene rootScene = new Scene(rootParent);
         rootScene.getStylesheets().add("/styles/Styles.css");
 
-        Parent sdssParent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
+        final Parent sdssParent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
         Scene sdsScene = new Scene(sdssParent);
         sdsScene.getStylesheets().add("/styles/Styles.css");
 
