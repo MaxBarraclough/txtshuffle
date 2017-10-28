@@ -57,16 +57,15 @@ public final class FXMLController implements Initializable {
 
             if (b1) {
                 System.out.println("[manual case]");
-            }
-            else {
-                FileChooser fc = new FileChooser();
+            } else {
+                final FileChooser fc = new FileChooser();
                 fc.setTitle("Select file");
 
                 // https://stackoverflow.com/a/33933973
                 final Node source = (Node)event.getSource();
                 final Window theStage = source.getScene().getWindow();
 
-                File file = fc.showOpenDialog(theStage);
+                final File file = fc.showOpenDialog(theStage);
 
                 System.out.println("You have selected:");
                 System.out.println(file.getPath());
@@ -75,7 +74,6 @@ public final class FXMLController implements Initializable {
         }
 
     }
-
 
 
 
