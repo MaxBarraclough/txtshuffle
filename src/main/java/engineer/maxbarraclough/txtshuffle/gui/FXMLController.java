@@ -11,10 +11,17 @@ public class FXMLController implements Initializable {
     
     @FXML
     private Label label;
-    
+
+    // JavaFX doesn't mind the 'private' modifier
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
+    private void handleEncodeButtonAction(ActionEvent event) {
+        System.out.println("[Show encode wizard]");
+        label.setText("Hello World!");
+    }
+
+    @FXML
+    private void handleDecodeButtonAction(ActionEvent event) {
+        System.out.println("[Show decode wizard]");
         label.setText("Hello World!");
     }
     

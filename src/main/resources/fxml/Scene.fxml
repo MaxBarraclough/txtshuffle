@@ -28,10 +28,10 @@ New (looks like Java 9 but works ok):
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" text="Encode" />
-            <Label text="Encode a message into a file" GridPane.columnIndex="1" />
-            <Button mnemonicParsing="false" text="Decode" GridPane.rowIndex="1" />
-            <Label text="Decode a message from a file" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Button fx:id="encodeButton" mnemonicParsing="false" text="Encode" onAction="#handleEncodeButtonAction"/>
+            <Label fx:id="encodeLabel" text="Encode a message into a file" GridPane.columnIndex="1" />
+            <Button fx:id="decodeButton" mnemonicParsing="false" text="Decode" GridPane.rowIndex="1" onAction="#handleDecodeButtonAction"/>
+            <Label fx:id="decodeLabel" text="Decode a message from a file" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
     </children>
