@@ -18,7 +18,7 @@ import javafx.scene.control.RadioButton;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class FXMLController implements Initializable {
+public final class FXMLController implements Initializable {
 
     @FXML private RadioButton sdsFromManualRadio;
     @FXML private RadioButton sdsFromFileRadio;
@@ -67,11 +67,11 @@ public class FXMLController implements Initializable {
     @FXML
     private void handleEncodeButtonAction(ActionEvent event) throws IOException {
 
-                Parent sdssParent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
-                Scene sdsScene = new Scene(sdssParent);
+                final Parent sdssParent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
+                final Scene sdsScene = new Scene(sdssParent);
                 sdsScene.getStylesheets().add("/styles/Styles.css");
 
-                Stage stage = new Stage();
+                final Stage stage = new Stage();
 
                 // this call must be made before show()
                 stage.initModality(Modality.APPLICATION_MODAL); // https://docs.oracle.com/javase/8/javafx/api/javafx/stage/Stage.html
@@ -89,6 +89,6 @@ public class FXMLController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+
     }
 }
