@@ -21,11 +21,11 @@ public final class MainApp extends Application {
     
     public MainApp() throws IOException
     {
-        Parent rootParent = FXMLLoader.load(getClass().getResource("/fxml/Scene.fxml"));
+        Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/Scene.fxml"));
         this.rootScene = new Scene(rootParent);
         this.rootScene.getStylesheets().add("/styles/Styles.css");
         
-        Parent sdssParent = FXMLLoader.load(getClass().getResource("/fxml/SelectDataSource.fxml"));
+        Parent sdssParent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
         this.sdsScene = new Scene(sdssParent);
         this.rootScene.getStylesheets().add("/styles/Styles.css");
     }
