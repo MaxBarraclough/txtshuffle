@@ -9,13 +9,13 @@
 
 <!--
 Old:
-<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml" fx:controller="engineer.maxbarraclough.txtshuffle.gui.FXMLController">
+<AnchorPane id="AnchorPane" prefHeight="194" prefWidth="320" xmlns:fx="http://javafx.com/fxml" fx:controller="engineer.maxbarraclough.txtshuffle.gui.FXMLController">
 
 New (looks like Java 9 but works ok):
-<AnchorPane id="AnchorPane" prefHeight="320.0" prefWidth="330.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/9.0.1" fx:controller="engineer.maxbarraclough.txtshuffle.gui.FXMLController">
+<AnchorPane id="AnchorPane" prefHeight="194" prefWidth="320.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/9.0.1" fx:controller="engineer.maxbarraclough.txtshuffle.gui.FXMLController">
 -->
 
-<AnchorPane id="AnchorPane" prefHeight="194.0" prefWidth="320" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="engineer.maxbarraclough.txtshuffle.gui.FXMLController">
+<AnchorPane id="AnchorPane" prefHeight="194" prefWidth="320" xmlns:fx="http://javafx.com/fxml" fx:controller="engineer.maxbarraclough.txtshuffle.gui.FXMLController">
     <children>
       <GridPane layoutX="14.0" layoutY="14.0" prefHeight="132.0" prefWidth="280.0" AnchorPane.bottomAnchor="48.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="26.0" AnchorPane.topAnchor="14.0">
         <columnConstraints>
