@@ -9,17 +9,55 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.RadioButton;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class FXMLController implements Initializable {
 
+    @FXML private RadioButton sdsFromManualRadio;
+    @FXML private RadioButton sdsFromFileRadio;
+
+    @FXML private ToggleGroup tg;
+
     // TODO could move this to its own class
     @FXML
     private void handleSourceContinueButtonAction(ActionEvent event)
     {
-        System.out.println("[Establish which was selected and move on]");
+        assert(null != sdsFromManualRadio);
+        assert(null != sdsFromFileRadio);
+
+        final Toggle tog = tg.getSelectedToggle();
+
+        if (null == tog)
+        {
+            final Alert alert = new Alert(
+                    Alert.AlertType.WARNING,
+                    "Select an option before continuing",
+                    ButtonType.OK
+            );
+
+            alert.showAndWait();
+        }
+        else
+        {
+            final boolean b1 = (tog == sdsFromManualRadio);
+            final boolean b2 = (tog == sdsFromFileRadio);
+
+            assert(b1 != b2);
+
+            if (b1) {
+                System.out.println("[file-reading case]");
+            } else {
+                System.out.println("[manual case]");
+            }
+        }
+
     }
 
 
