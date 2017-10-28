@@ -37,7 +37,7 @@ public final class FXMLController implements Initializable {
         if (null == tog)
         {
             final Alert alert = new Alert(
-                    Alert.AlertType.WARNING,
+                    Alert.AlertType.NONE,
                     "Select an option before continuing",
                     ButtonType.OK
             );
