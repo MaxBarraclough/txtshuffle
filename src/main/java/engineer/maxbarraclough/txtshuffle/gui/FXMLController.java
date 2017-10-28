@@ -1,5 +1,6 @@
 package engineer.maxbarraclough.txtshuffle.gui;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -7,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -15,8 +17,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.RadioButton;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public final class FXMLController implements Initializable {
 
@@ -52,9 +56,21 @@ public final class FXMLController implements Initializable {
             assert(b1 != b2);
 
             if (b1) {
-                System.out.println("[file-reading case]");
-            } else {
                 System.out.println("[manual case]");
+            }
+            else {
+                FileChooser fc = new FileChooser();
+                fc.setTitle("Select file");
+
+                // https://stackoverflow.com/a/33933973
+                final Node source = (Node)event.getSource();
+                final Window theStage = source.getScene().getWindow();
+
+                File file = fc.showOpenDialog(theStage);
+
+                System.out.println("You have selected:");
+                System.out.println(file.getPath());
+                System.out.println();
             }
         }
 
