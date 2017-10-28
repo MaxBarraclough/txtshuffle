@@ -15,6 +15,16 @@ import javafx.stage.Stage;
 
 public class FXMLController implements Initializable {
 
+    // TODO could move this to its own class
+    @FXML
+    private void handleSourceContinueButtonAction(ActionEvent event)
+    {
+        System.out.println("[Establish which was selected and move on]");
+    }
+
+
+
+
     // JavaFX doesn't mind the 'private' modifier
     @FXML
     private void handleEncodeButtonAction(ActionEvent event) throws IOException {
