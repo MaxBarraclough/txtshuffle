@@ -30,7 +30,7 @@ public final class MainApp extends Application {
         rootScene.getStylesheets().add("/styles/Styles.css");
 
         final Parent sdssParent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
-        Scene sdsScene = new Scene(sdssParent);
+        final Scene sdsScene = new Scene(sdssParent);
         sdsScene.getStylesheets().add("/styles/Styles.css");
 
         stage.setTitle("txtshuffle");
