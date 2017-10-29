@@ -3,6 +3,7 @@ package engineer.maxbarraclough.txtshuffle.gui;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -46,7 +48,7 @@ public final class FXMLController implements Initializable {
                     ButtonType.OK
             );
 
-            alert.showAndWait();
+            alert.showAndWait(); // TODO go async: use 'show' and a listener
         }
         else
         {
@@ -56,7 +58,19 @@ public final class FXMLController implements Initializable {
             assert(b1 != b2);
 
             if (b1) {
-                System.out.println("[manual case]");
+                // Can't use TextInputDialog - it uses TextField, which is necessarily single-line
+                // Instead we must use a custom scene with a TextArea widget
+//                final TextInputDialog tid = new TextInputDialog();
+//
+//                final Optional<String> theText_Opt = tid.showAndWait(); // TODO go async: use 'show' and a listener
+//
+//                if (theText_Opt.isPresent()) {
+//                    final String theText = theText_Opt.get();
+//
+//                    // TODO read into memory and save that somewhere, somehow
+//                    System.out.println("You have entered:");
+//                    System.out.println(theText);
+//                } // else do nothing - user cancelled their text-entry
             } else {
                 final FileChooser fc = new FileChooser();
                 fc.setTitle("Select file");
@@ -88,7 +102,7 @@ public final class FXMLController implements Initializable {
                             ButtonType.OK
                     );
 
-                    alert.showAndWait();
+                    alert.showAndWait(); // TODO go async: use 'show' and a listener
 
                     // TODO move this to its own method
                     {
