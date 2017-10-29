@@ -150,7 +150,7 @@ public final class FXMLController implements Initializable {
 
     // TODO could move this to its own class
     @FXML
-    private void handleSourceContinueButtonAction(ActionEvent event) throws IOException
+    private void handleDataSrcCntButtonAction(ActionEvent event) throws IOException
     {
         assert(null != sdsFromManualRadio);
         assert(null != sdsFromFileRadio);
