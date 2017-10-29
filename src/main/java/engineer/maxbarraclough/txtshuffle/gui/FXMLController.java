@@ -36,8 +36,14 @@ public final class FXMLController implements Initializable {
     @FXML private RadioButton sdsFromFileRadio;
 
     @FXML private ToggleGroup smsTg;
-    @FXML private ToggleGroup tg;
+    @FXML private ToggleGroup dstg;
 
+
+
+    @FXML
+    private void handleEntDsButtonAction(ActionEvent event) {
+        System.out.println("[handleEntDsButtonAction has been called]");
+    }
 
     @FXML
     private void handleEntMsgButtonAction(ActionEvent event) throws IOException {
@@ -50,14 +56,13 @@ public final class FXMLController implements Initializable {
                         final Window window = source.getScene().getWindow();
 
                         final Stage stage = (Stage) window; // ugly cast following https://stackoverflow.com/a/31686775
-                        stage.setTitle("Select Message Source");
 
-                        final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
-                        final Scene rootScene = new Scene(rootParent);
-                        rootScene.getStylesheets().add("/styles/Styles.css");
+                        final Parent parent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
+                        final Scene scene = new Scene(parent);
+                        scene.getStylesheets().add("/styles/Styles.css");
 
                         stage.setTitle("Select Data-Set Source");
-                        stage.setScene(rootScene);
+                        stage.setScene(scene);
                     }
     }
 
@@ -134,7 +139,7 @@ public final class FXMLController implements Initializable {
                     // TODO move this to its own method
                     {
                         final Stage stage = (Stage) window; // ugly cast following https://stackoverflow.com/a/31686775
-                        stage.setTitle("Select Message Source");
+                        stage.setTitle("Select Data-Set Source");
 
                         final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
                         final Scene rootScene = new Scene(rootParent);
@@ -155,7 +160,7 @@ public final class FXMLController implements Initializable {
         assert(null != sdsFromManualRadio);
         assert(null != sdsFromFileRadio);
 
-        final Toggle tog = tg.getSelectedToggle();
+        final Toggle tog = dstg.getSelectedToggle();
 
         if (null == tog)
         {
@@ -175,24 +180,21 @@ public final class FXMLController implements Initializable {
             assert(b1 != b2);
 
             if (b1) {
-
-                    // TODO move this to its own method
-                {
                     final Node source = (Node)(event.getSource());
                     final Window window = source.getScene().getWindow();
 
                     final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
-                    stage.setTitle("Enter Message Text");
+                    stage.setTitle("Enter Data-Set Text");
 
-                    final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/EnterMessageText.fxml"));
+                    final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/EnterDataSetText.fxml"));
                     final Scene rootScene = new Scene(rootParent);
                     rootScene.getStylesheets().add("/styles/Styles.css");
 
                     stage.setScene(rootScene);
-                }
-            } else {
+
+            } else { // from file
                 final FileChooser fc = new FileChooser();
-                fc.setTitle("Select file");
+                fc.setTitle("Select data-set file");
 
                 // FXML binding can only be used for entities within the scene
                 // https://stackoverflow.com/a/33933973
@@ -217,30 +219,30 @@ public final class FXMLController implements Initializable {
                     // For now, just show success popup
                     final Alert alert = new Alert(
                             Alert.AlertType.NONE,
-                            "Successfully read file",
+                            "Successfully read data-set file",
                             ButtonType.OK
                     );
 
                     alert.showAndWait(); // TODO go async: use 'show' and a listener
 
-                    // TODO move this to its own method
-                    {
-                        final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
-                        stage.setTitle("Select Message Source");
 
-                        final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectMessageSource.fxml"));
-                        final Scene rootScene = new Scene(rootParent);
-                        rootScene.getStylesheets().add("/styles/Styles.css");
 
-                        stage.setScene(rootScene);
-                    }
+//                    {
+//                        final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
+//                        stage.setTitle("Select Data-Set Source");
+//
+//                        final Parent parent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectMessageSource.fxml"));
+//                        final Scene rootScene = new Scene(parent);
+//                        rootScene.getStylesheets().add("/styles/Styles.css");
+//
+//                        stage.setScene(rootScene);
+//                    }
                 } // else do nothing - user cancelled file-selection
 
             }
         }
 
     }
-
 
 
     // JavaFX doesn't mind the 'private' modifier
@@ -261,6 +263,7 @@ public final class FXMLController implements Initializable {
                 stage.setScene(sdsScene);
                 stage.show();
     }
+
 
     @FXML
     private void handleDecodeButtonAction(ActionEvent event) {
