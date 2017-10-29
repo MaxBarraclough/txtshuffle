@@ -29,10 +29,6 @@ public final class MainApp extends Application {
         final Scene rootScene = new Scene(rootParent);
         rootScene.getStylesheets().add("/styles/Styles.css");
 
-        final Parent sdssParent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
-        final Scene sdsScene = new Scene(sdssParent);
-        sdsScene.getStylesheets().add("/styles/Styles.css");
-
         stage.setTitle("txtshuffle");
         stage.setResizable(false);
 
