@@ -38,19 +38,14 @@ public final class FXMLController implements Initializable {
     @FXML private ToggleGroup smsTg;
     @FXML private ToggleGroup tg;
 
-
-
     @FXML
-    private void handleMsgSrcContButtonAction(ActionEvent event) throws IOException
-    {
-{
-        assert(null != smsFromManualRadio);
-        assert(null != smsFromFileRadio);
+    private void handleMsgSrcContButtonAction(ActionEvent event) throws IOException {
+        assert (null != smsFromManualRadio);
+        assert (null != smsFromFileRadio);
 
         final Toggle tog = smsTg.getSelectedToggle();
 
-        if (null == tog)
-        {
+        if (null == tog) {
             final Alert alert = new Alert(
                     Alert.AlertType.NONE,
                     "Select an option before continuing",
@@ -58,24 +53,20 @@ public final class FXMLController implements Initializable {
             );
 
             alert.showAndWait(); // TODO go async: use 'show' and a listener
-        }
-        else
-        {
+        } else {
             final boolean b1 = (tog == smsFromManualRadio);
             final boolean b2 = (tog == smsFromFileRadio);
 
-            assert(b1 != b2);
-
-            // assert(false); // // // // TEST TEST TEST
+            assert (b1 != b2);
 
             if (b1) {
 
-                    // TODO move this to its own method
+                // TODO move this to its own method
                 {
-                    final Node source = (Node)(event.getSource());
+                    final Node source = (Node) (event.getSource());
                     final Window window = source.getScene().getWindow();
 
-                    final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
+                    final Stage stage = (Stage) window; // ugly cast following https://stackoverflow.com/a/31686775
                     stage.setTitle("Enter Message Text");
 
                     final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/EnterMessageText.fxml"));
@@ -90,7 +81,7 @@ public final class FXMLController implements Initializable {
 
                 // FXML binding can only be used for entities within the scene
                 // https://stackoverflow.com/a/33933973
-                final Node source = (Node)event.getSource();
+                final Node source = (Node) event.getSource();
                 final Window window = source.getScene().getWindow();
 
                 final File file = fc.showOpenDialog(window); // can return null
@@ -106,7 +97,6 @@ public final class FXMLController implements Initializable {
                     System.out.println();
 
                     // TODO read into memory and save that somewhere, somehow
-
                     // TODO popup confirming success, or announcing failure
                     // For now, just show success popup
                     final Alert alert = new Alert(
@@ -119,7 +109,7 @@ public final class FXMLController implements Initializable {
 
                     // TODO move this to its own method
                     {
-                        final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
+                        final Stage stage = (Stage) window; // ugly cast following https://stackoverflow.com/a/31686775
                         stage.setTitle("Select Message Source");
 
                         final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
@@ -132,20 +122,6 @@ public final class FXMLController implements Initializable {
 
             }
         }
-
-    }
-
-//                    final Node source = (Node)(event.getSource());
-//                    final Window window = source.getScene().getWindow();
-//
-//                    final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
-//                    stage.setTitle("Enter Message Text");
-//
-//                    final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
-//                    final Scene rootScene = new Scene(rootParent);
-//                    rootScene.getStylesheets().add("/styles/Styles.css");
-//
-//                    stage.setScene(rootScene);
     }
 
     // TODO could move this to its own class
