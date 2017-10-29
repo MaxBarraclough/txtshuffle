@@ -2,6 +2,7 @@ package engineer.maxbarraclough.txtshuffle.gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -58,19 +59,47 @@ public final class FXMLController implements Initializable {
             assert(b1 != b2);
 
             if (b1) {
-                // Can't use TextInputDialog - it uses TextField, which is necessarily single-line
-                // Instead we must use a custom scene with a TextArea widget
-//                final TextInputDialog tid = new TextInputDialog();
-//
-//                final Optional<String> theText_Opt = tid.showAndWait(); // TODO go async: use 'show' and a listener
-//
-//                if (theText_Opt.isPresent()) {
-//                    final String theText = theText_Opt.get();
-//
-//                    // TODO read into memory and save that somewhere, somehow
-//                    System.out.println("You have entered:");
-//                    System.out.println(theText);
-//                } // else do nothing - user cancelled their text-entry
+/*
+                // TextInputDialog uses TextField, which is necessarily single-line
+                // For multi-line we'd need to use a custom scene with a TextArea widget
+                // This is ok for simple messages though.
+                final TextInputDialog tid = new TextInputDialog("You may use ordinary letters, numbers, and the + and / symbols");
+
+                final Optional<String> theText_Opt = tid.showAndWait(); // TODO go async: use 'show' and a listener
+
+                if (theText_Opt.isPresent()) {
+                    final String theText = theText_Opt.get();
+
+                    // TODO read into memory and save that somewhere, somehow
+                    System.out.println("You have entered:");
+                    System.out.println(theText);
+
+                    final java.util.Base64.Decoder decoder = java.util.Base64.getDecoder();
+
+                    byte[] decoded = null;
+                    try {
+                        decoded = decoder.decode(theText);
+                    } catch (final IllegalArgumentException iae) {
+                        final Alert alert = new Alert(
+                                Alert.AlertType.NONE,
+                                "Successfully read file",
+                                ButtonType.OK
+                        );
+                        alert.showAndWait(); // TODO go async: use 'show' and a listener
+                    }
+                    // We don't want to catch for anything other than that one line
+                    // so we do this slightly perverse flow-control
+
+                    if (null != decoded)
+                    {
+                        final BigInteger bi = new BigInteger(decoded);
+
+                        System.out.println("Numerical representation:");
+                        System.out.println(bi);
+                    } // else do nothing: user entered bad data and was already alerted,
+                      // so we just send them back to the previous window
+                } // else do nothing - user cancelled their text-entry
+*/
             } else {
                 final FileChooser fc = new FileChooser();
                 fc.setTitle("Select file");
