@@ -65,11 +65,19 @@ public final class FXMLController implements Initializable {
                 final Node source = (Node)event.getSource();
                 final Window theStage = source.getScene().getWindow();
 
-                final File file = fc.showOpenDialog(theStage);
+                final File file = fc.showOpenDialog(theStage); // can return null
 
-                System.out.println("You have selected:");
-                System.out.println(file.getPath());
-                System.out.println();
+                if (null != file) {
+                    // assert(!file.isDirectory());
+                    assert (file.isFile());
+
+                    final long fileLength = file.length();
+
+                    System.out.println("You have selected:");
+                    System.out.println(file.getPath());
+                    System.out.println();
+                }
+
             }
         }
 
