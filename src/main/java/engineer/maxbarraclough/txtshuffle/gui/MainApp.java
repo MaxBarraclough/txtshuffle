@@ -25,6 +25,8 @@ public final class MainApp extends Application {
 
         // This stuff *must* be done here, *not* in 'init' or in ctor,
         // for execution on correct thread https://www.javaworld.com/article/3057072/
+
+        // getResource plays nice with JAR packaging, unlike file streams https://stackoverflow.com/a/2343224
         final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/Scene.fxml"));
         final Scene rootScene = new Scene(rootParent);
         rootScene.getStylesheets().add("/styles/Styles.css");
