@@ -59,6 +59,23 @@ public final class FXMLController implements Initializable {
             assert(b1 != b2);
 
             if (b1) {
+
+                    // TODO move this to its own method
+                {
+                    final Node source = (Node)(event.getSource());
+                    final Window window = source.getScene().getWindow();
+
+                    final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
+                    stage.setTitle("Enter Message Text");
+
+                    final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/EnterMessageText.fxml"));
+                    final Scene rootScene = new Scene(rootParent);
+                    rootScene.getStylesheets().add("/styles/Styles.css");
+
+                    stage.setScene(rootScene);
+                }
+
+
 /*
                 // TextInputDialog uses TextField, which is necessarily single-line
                 // For multi-line we'd need to use a custom scene with a TextArea widget
