@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ResourceBundle;
+import java.util.function.Supplier;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +21,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -38,11 +40,31 @@ public final class FXMLController implements Initializable {
     @FXML private ToggleGroup smsTg;
     @FXML private ToggleGroup dsTg;
 
+    @FXML private TextArea edsTextArea;
+
+
+    private static final class MessageDSSupplier implements Supplier<String[]> {
+        final String[] strs;
+
+        public MessageDSSupplier(final String[] strsArg) {
+            this.strs = strsArg;
+        }
+
+        @Override
+        public String[] get() {
+            return this.strs;
+        }
+    }
 
 
     @FXML
     private void handleEntDsButtonAction(ActionEvent event) {
         System.out.println("[handleEntDsButtonAction has been called]");
+
+        final String text = this.edsTextArea.getText();
+        final String[] split = text.split("\\r?\\n"); // https://stackoverflow.com/a/454913
+
+        Model.INSTANCE.setDataSetSupplier(new MessageDSSupplier(split));
     }
 
     @FXML
@@ -130,10 +152,8 @@ public final class FXMLController implements Initializable {
                     System.out.println(file.getPath());
                     System.out.println();
 
-                    Model.INSTANCE.setMessageSupplier(null); // // // // // // // // // // // // // //
+                    Model.INSTANCE.setMessageSupplier(new TextMessageSupplier(file));
 
-                    // TODO read into memory and save that somewhere, somehow
-                    // TODO popup confirming success, or announcing failure
                     // For now, just show success popup
                     final Alert alert = new Alert(
                             Alert.AlertType.NONE,
