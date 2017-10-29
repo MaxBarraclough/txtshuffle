@@ -56,6 +56,7 @@ public final class FXMLController implements Initializable {
                         final Scene rootScene = new Scene(rootParent);
                         rootScene.getStylesheets().add("/styles/Styles.css");
 
+                        stage.setTitle("Select Data-Set Source");
                         stage.setScene(rootScene);
                     }
     }
