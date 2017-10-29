@@ -61,8 +61,9 @@ public final class FXMLController implements Initializable {
                 final FileChooser fc = new FileChooser();
                 fc.setTitle("Select file");
 
+                // FXML binding can only be used for entities within the scene
                 // https://stackoverflow.com/a/33933973
-                final Node source = (Node)event.getSource(); // TODO there's a better way: FXML binding
+                final Node source = (Node)event.getSource();
                 final Window window = source.getScene().getWindow();
 
                 final File file = fc.showOpenDialog(window); // can return null
