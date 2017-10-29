@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="293.0" prefWidth="353.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="engineer.maxbarraclough.txtshuffle.gui.FXMLController">
+   <children>
+      <RadioButton fx:id="smsFromManualRadio" layoutX="14.0" layoutY="78.0" mnemonicParsing="false" text="Enter text manually" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="78.0">
+         <toggleGroup>
+            <ToggleGroup fx:id="smsTg" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="smsFromFileRadio" layoutX="14.0" layoutY="117.0" mnemonicParsing="false" text="Load from file" toggleGroup="$smsTg" />
+
+      <Button layoutX="371.0" layoutY="301.0" mnemonicParsing="false" onAction="#handleSourceContinueButtonAction" text="Continue" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+
+      <Label layoutX="61.0" layoutY="14.0" text="Select Message Source">
+         <font>
+            <Font size="23.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

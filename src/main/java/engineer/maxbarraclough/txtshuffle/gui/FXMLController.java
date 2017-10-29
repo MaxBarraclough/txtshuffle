@@ -31,7 +31,7 @@ public final class FXMLController implements Initializable {
 
     // TODO could move this to its own class
     @FXML
-    private void handleSourceContinueButtonAction(ActionEvent event)
+    private void handleSourceContinueButtonAction(ActionEvent event) throws IOException
     {
         assert(null != sdsFromManualRadio);
         assert(null != sdsFromFileRadio);
@@ -62,10 +62,10 @@ public final class FXMLController implements Initializable {
                 fc.setTitle("Select file");
 
                 // https://stackoverflow.com/a/33933973
-                final Node source = (Node)event.getSource();
-                final Window theStage = source.getScene().getWindow();
+                final Node source = (Node)event.getSource(); // TODO there's a better way: FXML binding
+                final Window window = source.getScene().getWindow();
 
-                final File file = fc.showOpenDialog(theStage); // can return null
+                final File file = fc.showOpenDialog(window); // can return null
 
                 if (null != file) {
                     // assert(!file.isDirectory());
@@ -76,7 +76,31 @@ public final class FXMLController implements Initializable {
                     System.out.println("You have selected:");
                     System.out.println(file.getPath());
                     System.out.println();
-                }
+
+                    // TODO read into memory and save that somewhere, somehow
+
+                    // TODO popup confirming success, or announcing failure
+                    // For now, just show success popup
+                    final Alert alert = new Alert(
+                            Alert.AlertType.NONE,
+                            "Successfully read file",
+                            ButtonType.OK
+                    );
+
+                    alert.showAndWait();
+
+                    // TODO move this to its own method
+                    {
+                        final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
+                        stage.setTitle("Select Message Source");
+
+                        final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectMessageSource.fxml"));
+                        final Scene rootScene = new Scene(rootParent);
+                        rootScene.getStylesheets().add("/styles/Styles.css");
+
+                        stage.setScene(rootScene);
+                    }
+                } // else do nothing - user cancelled file-selection
 
             }
         }
