@@ -43,10 +43,9 @@ public final class FXMLController implements Initializable {
     @FXML
     private void handleMsgSrcContButtonAction(ActionEvent event) throws IOException
     {
-
 {
-        assert(null != sdsFromManualRadio);
-        assert(null != sdsFromFileRadio);
+        assert(null != smsFromManualRadio);
+        assert(null != smsFromFileRadio);
 
         final Toggle tog = smsTg.getSelectedToggle();
 
