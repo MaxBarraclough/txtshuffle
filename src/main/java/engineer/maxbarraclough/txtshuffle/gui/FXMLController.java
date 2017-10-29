@@ -38,6 +38,29 @@ public final class FXMLController implements Initializable {
     @FXML private ToggleGroup smsTg;
     @FXML private ToggleGroup tg;
 
+
+    @FXML
+    private void handleEntMsgButtonAction(ActionEvent event) throws IOException {
+
+        // TODO save message somewhere somehow
+
+                    // TODO move this to its own method
+                    {
+                        final Node source = (Node) event.getSource();
+                        final Window window = source.getScene().getWindow();
+
+                        final Stage stage = (Stage) window; // ugly cast following https://stackoverflow.com/a/31686775
+                        stage.setTitle("Select Message Source");
+
+                        final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
+                        final Scene rootScene = new Scene(rootParent);
+                        rootScene.getStylesheets().add("/styles/Styles.css");
+
+                        stage.setScene(rootScene);
+                    }
+    }
+
+
     @FXML
     private void handleMsgSrcContButtonAction(ActionEvent event) throws IOException {
         assert (null != smsFromManualRadio);
