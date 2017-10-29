@@ -15,10 +15,10 @@
       <RadioButton fx:id="sdsFromManualRadio" layoutX="14.0" layoutY="78.0" mnemonicParsing="false" text="Enter text manually"
                    AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="78.0">
          <toggleGroup>
-            <ToggleGroup fx:id="dstg" />
+            <ToggleGroup fx:id="dsTg" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton fx:id="sdsFromFileRadio" layoutX="14.0" layoutY="117.0" mnemonicParsing="false" text="Load from file" toggleGroup="$dstg" />
+      <RadioButton fx:id="sdsFromFileRadio" layoutX="14.0" layoutY="117.0" mnemonicParsing="false" text="Load from file" toggleGroup="$dsTg" />
 
       <Button layoutX="371.0" layoutY="301.0" mnemonicParsing="false" text="Continue"
               AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0"

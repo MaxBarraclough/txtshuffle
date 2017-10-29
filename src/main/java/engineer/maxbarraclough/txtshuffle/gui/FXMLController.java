@@ -36,7 +36,7 @@ public final class FXMLController implements Initializable {
     @FXML private RadioButton sdsFromFileRadio;
 
     @FXML private ToggleGroup smsTg;
-    @FXML private ToggleGroup dstg;
+    @FXML private ToggleGroup dsTg;
 
 
 
@@ -160,7 +160,7 @@ public final class FXMLController implements Initializable {
         assert(null != sdsFromManualRadio);
         assert(null != sdsFromFileRadio);
 
-        final Toggle tog = dstg.getSelectedToggle();
+        final Toggle tog = dsTg.getSelectedToggle();
 
         if (null == tog)
         {
