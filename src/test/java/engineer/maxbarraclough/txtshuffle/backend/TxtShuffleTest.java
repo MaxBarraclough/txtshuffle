@@ -131,7 +131,6 @@ public final class TxtShuffleTest {
 		final String[] strs =
                         TxtShuffle.readFileIntoStringArr("src/test/java/engineer/maxbarraclough/txtshuffle/backend/example1.txt");
 
-		// TODO ugly conversion business again ///////////////////////////////
 		final int[] compact =
 				VectorConversions.intToCompactVector(
 				  strs.length,
@@ -143,8 +142,6 @@ public final class TxtShuffleTest {
 //		{
 //			compact[i] = compact_BIs[i].intValue();
 //		}
-
-		//////////////////////////////////////////////////////////////////////
 
 		final int[] isvFromCompact = VectorConversions.compactToIsv(compact);
 
