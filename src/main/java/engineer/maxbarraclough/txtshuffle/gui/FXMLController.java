@@ -1,5 +1,6 @@
 package engineer.maxbarraclough.txtshuffle.gui;
 
+import engineer.maxbarraclough.txtshuffle.backend.TxtShuffle;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -57,15 +58,38 @@ public final class FXMLController implements Initializable {
     }
 
 
+
     @FXML
-    private void handleEntDsButtonAction(ActionEvent event) {
+    private void handleEntDsButtonAction(ActionEvent event) throws IOException, TxtShuffle.NumberTooGreatException {
         System.out.println("[handleEntDsButtonAction has been called]");
 
         final String text = this.edsTextArea.getText();
         final String[] split = text.split("\\r?\\n"); // https://stackoverflow.com/a/454913
 
         Model.INSTANCE.setDataSetSupplier(new MessageDSSupplier(split));
+
+        // TODO exception-handling
+
+        final Supplier<byte[]> msgSup = Model.INSTANCE.getMessageSupplier();
+        final Supplier<String[]> dsSup = Model.INSTANCE.getDataSetSupplier();
+
+        if ((null == msgSup) || (null == dsSup)) {
+            System.err.println("Failed to initialize a supplier");
+        } else {
+            final byte[] messageBytes = Model.INSTANCE.getMessageSupplier().get();
+            final String[] dataSet = Model.INSTANCE.getDataSetSupplier().get();
+            final File file = new File("C:\\Users\\Kingsley\\Documents\\demo.txt"); // // // ANOTHER FILE-SELECT DIALOG...???
+
+            // TODO check for unique rows
+
+            // TODO check enough rows to encode the message
+
+            Model.encodeIntoFile(messageBytes, dataSet, file);
+        }
+
     }
+
+
 
     @FXML
     private void handleEntMsgButtonAction(ActionEvent event) throws IOException {
