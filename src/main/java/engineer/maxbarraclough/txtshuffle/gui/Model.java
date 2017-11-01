@@ -2,13 +2,14 @@ package engineer.maxbarraclough.txtshuffle.gui;
 
 import engineer.maxbarraclough.txtshuffle.backend.TxtShuffle;
 import engineer.maxbarraclough.txtshuffle.backend.VectorConversions;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.nio.file.Files;
-import java.util.function.Supplier;
+
 
 /**
  * Not thread-safe, so be sure to only access from the GUI thread
@@ -21,21 +22,21 @@ public final class Model {
     private Model() {
     }
 
-    private Supplier<String[]> dataSetSupplier;
-    public void setDataSetSupplier(Supplier<String[]> dss) {
-        this.dataSetSupplier = dss;
+    private String[] dataSet;
+    public void setDataSet(String[] ds) {
+        this.dataSet = ds;
     }
-    public Supplier<String[]> getDataSetSupplier() {
-        return this.dataSetSupplier;
+    public String[] getDataSet() {
+        return this.dataSet;
     }
     
 
-    private Supplier<byte[]> messageSupplier;
-    public void setMessageSupplier(Supplier<byte[]> ms) {
-        this.messageSupplier = ms;
+    private byte[] message;
+    public void setMessage(byte[] m) {
+        this.message = m;
     }
-    public Supplier<byte[]> getMessageSupplier() {
-        return this.messageSupplier;
+    public byte[] getMessage() {
+        return this.message;
     }
 
 

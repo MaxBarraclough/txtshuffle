@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
 import javafx.event.ActionEvent;
@@ -42,20 +43,8 @@ public final class FXMLController implements Initializable {
     @FXML private ToggleGroup dsTg;
 
     @FXML private TextArea edsTextArea;
+    @FXML private TextArea emTextArea;
 
-
-    private static final class MessageDSSupplier implements Supplier<String[]> {
-        final String[] strs;
-
-        public MessageDSSupplier(final String[] strsArg) {
-            this.strs = strsArg;
-        }
-
-        @Override
-        public String[] get() {
-            return this.strs;
-        }
-    }
 
 
 
@@ -66,18 +55,18 @@ public final class FXMLController implements Initializable {
         final String text = this.edsTextArea.getText();
         final String[] split = text.split("\\r?\\n"); // https://stackoverflow.com/a/454913
 
-        Model.INSTANCE.setDataSetSupplier(new MessageDSSupplier(split));
+        Model.INSTANCE.setDataSet(split);
 
         // TODO exception-handling
 
-        final Supplier<byte[]> msgSup = Model.INSTANCE.getMessageSupplier();
-        final Supplier<String[]> dsSup = Model.INSTANCE.getDataSetSupplier();
+        final byte[]   msgBytes = Model.INSTANCE.getMessage();
+        final String[] ds       = Model.INSTANCE.getDataSet();
 
-        if ((null == msgSup) || (null == dsSup)) {
+        if ((null == msgBytes) || (null == ds)) {
             System.err.println("Failed to initialize a supplier");
         } else {
-            final byte[] messageBytes = Model.INSTANCE.getMessageSupplier().get();
-            final String[] dataSet = Model.INSTANCE.getDataSetSupplier().get();
+            final byte[] messageBytes = Model.INSTANCE.getMessage();
+            final String[] dataSet = Model.INSTANCE.getDataSet();
             final File file = new File("C:\\Users\\Kingsley\\Documents\\demo.txt"); // // // ANOTHER FILE-SELECT DIALOG...???
 
             // TODO check for unique rows
@@ -94,22 +83,35 @@ public final class FXMLController implements Initializable {
     @FXML
     private void handleEntMsgButtonAction(ActionEvent event) throws IOException {
 
-        // TODO save message somewhere somehow
+        final String msgStr = this.emTextArea.getText();
 
-                    // TODO move this to its own method
-                    {
-                        final Node source = (Node) event.getSource();
-                        final Window window = source.getScene().getWindow();
+        try {
+            final byte[] msgBytes = TextMessageSupplier.strToByteArr(msgStr);
 
-                        final Stage stage = (Stage) window; // ugly cast following https://stackoverflow.com/a/31686775
+            Model.INSTANCE.setMessage(msgBytes);
 
-                        final Parent parent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
-                        final Scene scene = new Scene(parent);
-                        scene.getStylesheets().add("/styles/Styles.css");
+            // TODO move this to its own method
+            final Node source = (Node) event.getSource();
+            final Window window = source.getScene().getWindow();
 
-                        stage.setTitle("Select Data-Set Source");
-                        stage.setScene(scene);
-                    }
+            final Stage stage = (Stage) window; // ugly cast following https://stackoverflow.com/a/31686775
+
+            final Parent parent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
+            final Scene scene = new Scene(parent);
+            scene.getStylesheets().add("/styles/Styles.css");
+
+            stage.setTitle("Select Data-Set Source");
+            stage.setScene(scene);
+        } catch (IllegalArgumentException iae) {
+            final Alert alert = new Alert(
+                    Alert.AlertType.NONE,
+                    "Message should contain only letters, numbers, spaces, and newlines",
+                    ButtonType.OK
+            );
+
+            // TODO can we just do 'show' here, as we don't do anything afterwards on the thread?
+            alert.showAndWait(); // TODO go async: use 'show' and a listener
+        }
     }
 
 
@@ -176,7 +178,9 @@ public final class FXMLController implements Initializable {
                     System.out.println(file.getPath());
                     System.out.println();
 
-                    Model.INSTANCE.setMessageSupplier(new TextMessageSupplier(file));
+
+                    final byte[] fileBytes = Files.readAllBytes(file.toPath());
+                    Model.INSTANCE.setMessage(fileBytes);
 
                     // For now, just show success popup
                     final Alert alert = new Alert(
