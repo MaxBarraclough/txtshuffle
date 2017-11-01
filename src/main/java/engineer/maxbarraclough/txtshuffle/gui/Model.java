@@ -31,12 +31,12 @@ public final class Model {
     }
     
 
-    private byte[] message;
-    public void setMessage(byte[] m) {
-        this.message = m;
+    private byte[] messageBytes;
+    public void setMessageBytes(byte[] m) {
+        this.messageBytes = m;
     }
-    public byte[] getMessage() {
-        return this.message;
+    public byte[] getMessageBytes() {
+        return this.messageBytes;
     }
 
 
@@ -51,7 +51,7 @@ public final class Model {
      *
      * @throws engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.NumberTooGreatException
      */
-    private static String[] doEncode(final byte[] messageBytes, final String[] dataSet) throws TxtShuffle.NumberTooGreatException
+    private String[] doEncode() throws TxtShuffle.NumberTooGreatException
     {
                 // TODO move this logic to the backend package
 
@@ -79,10 +79,10 @@ public final class Model {
 
 
     // TODO make non-static and use the existing members
-    public static void encodeIntoFile(final byte[] messageBytes, final String[] dataSet, final File outputFile)
+    public void encodeIntoFile(final byte[] messageBytes, final String[] dataSet, final File outputFile)
             throws TxtShuffle.NumberTooGreatException, IOException // TODO proper exception handling
     {
-        Model.doEncode(messageBytes, dataSet);
+        this.doEncode();
 
         // TODO check the file doesn't already exist
 

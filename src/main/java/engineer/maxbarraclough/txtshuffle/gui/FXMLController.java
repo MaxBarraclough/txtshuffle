@@ -59,13 +59,13 @@ public final class FXMLController implements Initializable {
 
         // TODO exception-handling
 
-        final byte[]   msgBytes = Model.INSTANCE.getMessage();
+        final byte[]   msgBytes = Model.INSTANCE.getMessageBytes();
         final String[] ds       = Model.INSTANCE.getDataSet();
 
         if ((null == msgBytes) || (null == ds)) {
             System.err.println("Failed to initialize a supplier");
         } else {
-            final byte[] messageBytes = Model.INSTANCE.getMessage();
+            final byte[] messageBytes = Model.INSTANCE.getMessageBytes();
             final String[] dataSet = Model.INSTANCE.getDataSet();
             final File file = new File("C:\\Users\\Kingsley\\Documents\\demo.txt"); // // // ANOTHER FILE-SELECT DIALOG...???
 
@@ -73,7 +73,7 @@ public final class FXMLController implements Initializable {
 
             // TODO check enough rows to encode the message
 
-            Model.encodeIntoFile(messageBytes, dataSet, file);
+            Model.INSTANCE.encodeIntoFile(messageBytes, dataSet, file);
         }
 
     }
@@ -88,7 +88,7 @@ public final class FXMLController implements Initializable {
         try {
             final byte[] msgBytes = TextMessageSupplier.strToByteArr(msgStr);
 
-            Model.INSTANCE.setMessage(msgBytes);
+            Model.INSTANCE.setMessageBytes(msgBytes);
 
             // TODO move this to its own method
             final Node source = (Node) event.getSource();
@@ -180,7 +180,7 @@ public final class FXMLController implements Initializable {
 
 
                     final byte[] fileBytes = Files.readAllBytes(file.toPath());
-                    Model.INSTANCE.setMessage(fileBytes);
+                    Model.INSTANCE.setMessageBytes(fileBytes);
 
                     // For now, just show success popup
                     final Alert alert = new Alert(
