@@ -17,7 +17,7 @@ import java.nio.file.Files;
  */
 public final class Model {
 
-    public static final Model INSTANCE = new Model();
+    public static final Model INSTANCE = new Model(); // // // TODO this should probably live in the controller instead
 
     private Model() {
     }
@@ -84,12 +84,22 @@ public final class Model {
     {
         this.doEncode();
 
-        // TODO check the file doesn't already exist
+        // this.dataSet is now scrambled to encode this.messageBytes
 
-        try (FileWriter fw = new FileWriter(outputFile))
-        {
-            for(String s : dataSet) {
-                fw.write(s);
+        // TODO check the file doesn't already exist
+        try (FileWriter fw = new FileWriter(outputFile)) {
+
+            if (dataSet.length > 0) {
+                fw.write(dataSet[0]);
+
+                // https://stackoverflow.com/a/209771
+                final String lineSep = System.getProperty("line.separator");
+
+                for (int i = 1; i != dataSet.length; ++i) {
+                    fw.write(lineSep);
+                    final String s = dataSet[i];
+                    fw.write(s);
+                }
             }
         } // no catch or finally, we just want the with-resource feature
     }
