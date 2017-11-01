@@ -60,6 +60,7 @@ public final class TextMessageSupplier {
                     default:
                         throw new IllegalArgumentException();
                 }
+                sb.append((char)currentInt);
             } while (-1 != currentInt);
         }
 
@@ -105,6 +106,7 @@ public final class TextMessageSupplier {
                     default:
                         throw new IllegalArgumentException();
                 }
+                sb.append(currentChar);
             }
 
         final String str = sb.toString();
