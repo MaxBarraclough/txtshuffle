@@ -76,6 +76,24 @@ public final class FXMLController implements Initializable {
             Model.INSTANCE.encodeIntoFile(messageBytes, dataSet, file);
         }
 
+
+
+        /*******************************************/
+        /*************** TEMPORARY *****************/
+        /*******************************************/
+        final Alert alert = new Alert(
+                Alert.AlertType.NONE,
+                "Saved to demo.txt",
+                ButtonType.OK
+        );
+
+        // TODO can we just do 'show' here, as we don't do anything afterwards on the thread?
+        alert.showAndWait(); // TODO go async: use 'show' and a listener
+
+        final Node source = (Node) event.getSource();
+        final Window window = source.getScene().getWindow();
+        final Stage stage = (Stage) window;
+        stage.close();
     }
 
 
