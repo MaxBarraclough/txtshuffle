@@ -24,6 +24,7 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -45,7 +46,7 @@ public final class FXMLController implements Initializable {
     @FXML private TextArea edsTextArea;
     @FXML private TextArea emTextArea;
 
-
+    @FXML private Text soPathText;
 
 
     @FXML
@@ -300,16 +301,19 @@ public final class FXMLController implements Initializable {
 
 
 
-//                    {
-//                        final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
-//                        stage.setTitle("Select Data-Set Source");
-//
-//                        final Parent parent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectMessageSource.fxml"));
-//                        final Scene rootScene = new Scene(parent);
-//                        rootScene.getStylesheets().add("/styles/Styles.css");
-//
-//                        stage.setScene(rootScene);
-//                    }
+                    // TODO select output sink and go
+
+
+                    { // TODO move to own method
+                        final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
+                        stage.setTitle("Select Output");
+
+                        final Parent parent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectOutputSink.fxml"));
+                        final Scene rootScene = new Scene(parent);
+                        rootScene.getStylesheets().add("/styles/Styles.css");
+
+                        stage.setScene(rootScene);
+                    }
                 } // else do nothing - user cancelled file-selection
 
             }
@@ -336,6 +340,28 @@ public final class FXMLController implements Initializable {
                 stage.setScene(sdsScene);
                 stage.show();
     }
+
+
+
+    @FXML
+    private void handleSelectOutputFileButtonAction()
+    {
+
+        this.soPathText.setText("TODO");
+
+        // //
+    }
+
+
+
+    @FXML
+    private void handleGoEncodeButtonAction()
+    {
+        // //
+    }
+
+
+
 
 
     @FXML
