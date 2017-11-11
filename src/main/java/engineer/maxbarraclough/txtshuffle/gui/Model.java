@@ -93,7 +93,10 @@ public final class Model {
                 fw.write(dataSet[0]);
 
                 // https://stackoverflow.com/a/209771
-                final String lineSep = System.getProperty("line.separator");
+                //final String lineSep = System.getProperty("line.separator");
+
+                // https://stackoverflow.com/a/10937340
+                final String lineSep = System.lineSeparator();
 
                 for (int i = 1; i != dataSet.length; ++i) {
                     fw.write(lineSep);
