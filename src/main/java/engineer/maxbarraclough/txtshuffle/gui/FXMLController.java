@@ -299,12 +299,17 @@ public final class FXMLController implements Initializable {
 
                     alert.showAndWait(); // TODO go async: use 'show' and a listener
 
+                    this.goToSelectOutputSink(window);
+                } // else do nothing - user cancelled file-selection
+
+            }
+        }
+
+    }
 
 
-                    // TODO select output sink and go
-
-
-                    { // TODO move to own method
+    private void goToSelectOutputSink(final Window window) throws IOException
+    {
                         final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
                         stage.setTitle("Select Output");
 
@@ -313,12 +318,6 @@ public final class FXMLController implements Initializable {
                         rootScene.getStylesheets().add("/styles/Styles.css");
 
                         stage.setScene(rootScene);
-                    }
-                } // else do nothing - user cancelled file-selection
-
-            }
-        }
-
     }
 
 
