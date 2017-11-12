@@ -167,14 +167,7 @@ public final class FXMLController implements Initializable {
                     final Node source = (Node) (event.getSource());
                     final Window window = source.getScene().getWindow();
 
-                    final Stage stage = (Stage) window; // ugly cast following https://stackoverflow.com/a/31686775
-                    stage.setTitle("Enter Message Text");
-
-                    final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/EnterMessageText.fxml"));
-                    final Scene rootScene = new Scene(rootParent);
-                    rootScene.getStylesheets().add("/styles/Styles.css");
-
-                    stage.setScene(rootScene);
+                    this.goToEnterMessageText(window);
                 }
             } else {
                 final FileChooser fc = new FileChooser();
@@ -211,7 +204,31 @@ public final class FXMLController implements Initializable {
                     alert.showAndWait(); // TODO go async: use 'show' and a listener
 
                     // TODO move this to its own method
-                    {
+
+                    this.goToSelectDataSource(window);
+
+                } // else do nothing - user cancelled file-selection
+
+            }
+        }
+    }
+
+
+    private void goToEnterMessageText(final Window window) throws IOException
+    {
+                    final Stage stage = (Stage) window; // ugly cast following https://stackoverflow.com/a/31686775
+                    stage.setTitle("Enter Message Text");
+
+                    final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/EnterMessageText.fxml"));
+                    final Scene rootScene = new Scene(rootParent);
+                    rootScene.getStylesheets().add("/styles/Styles.css");
+
+                    stage.setScene(rootScene);
+    }
+
+
+    private void goToSelectDataSource(final Window window) throws IOException
+    {
                         final Stage stage = (Stage) window; // ugly cast following https://stackoverflow.com/a/31686775
                         stage.setTitle("Select Data-Set Source");
 
@@ -220,12 +237,10 @@ public final class FXMLController implements Initializable {
                         rootScene.getStylesheets().add("/styles/Styles.css");
 
                         stage.setScene(rootScene);
-                    }
-                } // else do nothing - user cancelled file-selection
-
-            }
-        }
     }
+
+
+
 
     // TODO could move this to its own class
     @FXML
