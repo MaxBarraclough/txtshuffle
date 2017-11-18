@@ -288,33 +288,27 @@ public final class FXMLController implements Initializable {
                     final boolean isFile = file.isFile();
                     assert (isFile);
 
-                    if (isFile)
-                    {
-                    final long fileLength = file.length();
+                    if (isFile) {
+                        final long fileLength = file.length();
 
-                    System.out.println("You have selected:");
-                    System.out.println(file.getPath());
-                    System.out.println();
+                        System.out.println("You have selected:");
+                        System.out.println(file.getPath());
+                        System.out.println();
 
+                        // // // // // TODO implement state
+                        // TODO read into memory and save that somewhere, somehow
+                        // TODO popup confirming success, or announcing failure
+                        // For now, just show success popup
+                        final Alert alert = new Alert(
+                                Alert.AlertType.NONE,
+                                "Successfully read data-set file",
+                                ButtonType.OK
+                        );
 
-                    // // // // // TODO implement state
+                        alert.showAndWait(); // TODO go async: use 'show' and a listener
 
-                    // TODO read into memory and save that somewhere, somehow
-
-                    // TODO popup confirming success, or announcing failure
-                    // For now, just show success popup
-                    final Alert alert = new Alert(
-                            Alert.AlertType.NONE,
-                            "Successfully read data-set file",
-                            ButtonType.OK
-                    );
-
-                    alert.showAndWait(); // TODO go async: use 'show' and a listener
-
-                    this.goToSelectOutputSink(window);
-                    }
-                    else
-                    {
+                        this.goToSelectOutputSink(window);
+                    } else {
                         // // TODO popup saying 'Select a real file please'
                     }
                 } // else do nothing - user cancelled file-selection
