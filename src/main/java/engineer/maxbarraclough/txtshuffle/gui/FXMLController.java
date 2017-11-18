@@ -340,7 +340,8 @@ public final class FXMLController implements Initializable {
 
 
     /**
-     * TODO IS THIS WRONG? WHAT ABOUT handleGoEncodeButtonAction
+     * Set the wizard started for the 'Encode' use-case.
+     * Do not confuse with handleGoEncodeButtonAction which does the final encode work.
      * Finish up: do the actual work
      * @param event
      * @throws IOException
@@ -388,10 +389,12 @@ public final class FXMLController implements Initializable {
 
 
     /**
-     * TODO IS THIS WRONG? WHAT ABOUT handleEncodeButtonAction ???
+     * Do final encode work.
+     * Do not confuse with handleEncodeButtonAction which begins
+     * the wizard for the encode process.
      */
     @FXML
-    private void handleGoEncodeButtonAction()
+    private void handleGoEncodeButtonAction() // // TODO why no arg? ActionEvent event
     {
         // //
 
