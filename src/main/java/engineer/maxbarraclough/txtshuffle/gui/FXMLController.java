@@ -61,10 +61,9 @@ public final class FXMLController implements Initializable {
      * which concerns selection of which data source (file or 'manual')
      * @param event
      * @throws IOException
-     * @throws engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.NumberTooGreatException
      */
     @FXML
-    private void handleEntDsButtonAction(ActionEvent event) throws IOException, TxtShuffle.NumberTooGreatException {
+    private void handleEntDsButtonAction(ActionEvent event) throws IOException {
         System.out.println("[handleEntDsButtonAction has been called]");
 
         final String text = this.edsTextArea.getText();
@@ -162,7 +161,7 @@ public final class FXMLController implements Initializable {
 
                 if (null != file) {
                     // assert(!file.isDirectory());
-                    assert (file.isFile());
+                    assert (file.isFile()); // TODO handle that properly
 
                     // final long fileLength = file.length();
 
@@ -292,7 +291,6 @@ public final class FXMLController implements Initializable {
                 if (null != file) {
                     // assert(!file.isDirectory());
                     final boolean isFile = file.isFile();
-                    assert (isFile);
 
                     if (isFile) {
                         final long fileLength = file.length();
@@ -384,22 +382,55 @@ public final class FXMLController implements Initializable {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // // // // // // // // DO WE NEED BOTH THESE METHODS???????????
+
     /**
      * If all is well, progress to next scene
      */
     @FXML
-    private void handleSelectOutputFileButtonAction()
-    {
+    private void handleSelectOutputFileButtonAction(final ActionEvent event) { // // TODO IS THAT ARG OK ???
 
+        final FileChooser fc = new FileChooser();
+        fc.setTitle("Select output file");
 
+        // FXML binding can only be used for entities within the scene
+        // https://stackoverflow.com/a/33933973
+        final Node source = (Node) event.getSource();
+        final Window window = source.getScene().getWindow();
 
-        // // // // // WHERE DOES THE STATE GO? HOW DO WE DO A FILE-SELECT DIALOG???
+        final File file = fc.showOpenDialog(window); // can return null
 
+        if (null != file) {
+            // assert(!file.isDirectory());
+            final boolean isFile = file.isFile();
 
+            if (isFile) {
+            } else {
+                final Alert alert = new Alert(
+                        Alert.AlertType.NONE,
+                        "Please select a file",
+                        ButtonType.OK
+                );
+
+                alert.showAndWait(); // TODO go async: use 'show' and a listener
+            }
+        } // else user canceled - failed to select an output file
 
         // // // // //
-
-        this.soPathText.setText("TODO");
+        // this.soPathText.setText("TODO");
 
         // //
     }
@@ -414,48 +445,37 @@ public final class FXMLController implements Initializable {
     @FXML
     private void handleGoEncodeButtonAction() // // TODO why no arg? ActionEvent event
     {
-        // //
+        // TODO exception-handling
 
-        {
-            int dummy = 42;
+        final byte[]   msgBytes = Model.INSTANCE.getMessageBytes();
+        final String[] ds       = Model.INSTANCE.getDataSet();
+
+        if ((null == msgBytes) || (null == ds)) {
+            System.err.println("Failed to initialize a data-source");
+        } else {
+            //final File file = new File("C:\\Users\\Kingsley\\Documents\\demo.txt"); // // // ANOTHER FILE-SELECT DIALOG...???
+
+            // //
+
+
+
+
+            // //
+
+
+
+
+            // TODO check for unique rows
+
+            // TODO check enough rows to encode the message
+
+            // // Model.INSTANCE.encodeIntoFile(msgBytes, ds, this.);
+
         }
 
-
-
-
-        /*
-
-//        Model.INSTANCE.setDataSet(split);
-//
-//        // TODO exception-handling
-//
-//        final byte[]   msgBytes = Model.INSTANCE.getMessageBytes();
-//        final String[] ds       = Model.INSTANCE.getDataSet();
-//
-//        if ((null == msgBytes) || (null == ds)) {
-//            System.err.println("Failed to initialize a data-source");
-//        } else {
-////            final byte[] messageBytes = Model.INSTANCE.getMessageBytes();
-////            final String[] dataSet = Model.INSTANCE.getDataSet();
-//
-//            //final File file = new File("C:\\Users\\Kingsley\\Documents\\demo.txt"); // // // ANOTHER FILE-SELECT DIALOG...???
-//
-//            // TODO check for unique rows
-//
-//            // TODO check enough rows to encode the message
-//
-//            // Model.INSTANCE.encodeIntoFile(messageBytes, dataSet, file);
-//
-//            Model.INSTANCE.setDataSet(ds);
-        }
-
-
-
-        /*******************************************/
         /*************** TEMPORARY *****************/
-        /*******************************************/
 
-        /*
+        //*
         final Alert alert = new Alert(
                 Alert.AlertType.NONE,
                 "Saved to demo.txt",
@@ -470,7 +490,7 @@ public final class FXMLController implements Initializable {
         final Stage stage = (Stage) window;
         stage.close();
 
-        */
+        /**/
     }
 
 
