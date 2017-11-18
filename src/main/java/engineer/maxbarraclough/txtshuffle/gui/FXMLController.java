@@ -49,6 +49,17 @@ public final class FXMLController implements Initializable {
     @FXML private Text soPathText;
 
 
+    private static byte[] binFileToByteArr(final File file) {
+        throw new java.lang.UnsupportedOperationException("Not yet implemented");
+    }
+
+
+    /**
+     * Handle entering data source
+     * @param event
+     * @throws IOException
+     * @throws engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.NumberTooGreatException
+     */
     @FXML
     private void handleEntDsButtonAction(ActionEvent event) throws IOException, TxtShuffle.NumberTooGreatException {
         System.out.println("[handleEntDsButtonAction has been called]");
@@ -57,51 +68,16 @@ public final class FXMLController implements Initializable {
         final String[] split = text.split("\\r?\\n"); // https://stackoverflow.com/a/454913
 
         Model.INSTANCE.setDataSet(split);
-
-        // TODO exception-handling
-
-        final byte[]   msgBytes = Model.INSTANCE.getMessageBytes();
-        final String[] ds       = Model.INSTANCE.getDataSet();
-
-        if ((null == msgBytes) || (null == ds)) {
-            System.err.println("Failed to initialize a supplier");
-        } else {
-            final byte[] messageBytes = Model.INSTANCE.getMessageBytes();
-            final String[] dataSet = Model.INSTANCE.getDataSet();
-            final File file = new File("C:\\Users\\Kingsley\\Documents\\demo.txt"); // // // ANOTHER FILE-SELECT DIALOG...???
-
-            // TODO check for unique rows
-
-            // TODO check enough rows to encode the message
-
-            Model.INSTANCE.encodeIntoFile(messageBytes, dataSet, file);
-        }
-
-
-
-        /*******************************************/
-        /*************** TEMPORARY *****************/
-        /*******************************************/
-        final Alert alert = new Alert(
-                Alert.AlertType.NONE,
-                "Saved to demo.txt",
-                ButtonType.OK
-        );
-
-        // TODO can we just do 'show' here, as we don't do anything afterwards on the thread?
-        alert.showAndWait(); // TODO go async: use 'show' and a listener
-
-        final Node source = (Node) event.getSource();
-        final Window window = source.getScene().getWindow();
-        final Stage stage = (Stage) window;
-        stage.close();
     }
 
 
-
+    /**
+     * Handle enter message data through text box
+     * @param event
+     * @throws IOException
+     */
     @FXML
     private void handleEntMsgButtonAction(ActionEvent event) throws IOException {
-
         final String msgStr = this.emTextArea.getText();
 
         try {
@@ -134,11 +110,12 @@ public final class FXMLController implements Initializable {
     }
 
 
-    private static byte[] binFileToByteArr(final File file) {
-        throw new java.lang.UnsupportedOperationException("Not yet implemented");
-    }
 
-
+    /**
+     * Handle selecting a message source
+     * @param event
+     * @throws IOException
+     */
     @FXML
     private void handleMsgSrcContButtonAction(ActionEvent event) throws IOException {
         assert (null != smsFromManualRadio);
@@ -214,6 +191,11 @@ public final class FXMLController implements Initializable {
     }
 
 
+    /**
+     * Helper: switch stage's scene to the one for entering message text 'manually'
+     * @param window
+     * @throws IOException
+     */
     private void goToEnterMessageText(final Window window) throws IOException
     {
                     final Stage stage = (Stage) window; // ugly cast following https://stackoverflow.com/a/31686775
@@ -227,6 +209,11 @@ public final class FXMLController implements Initializable {
     }
 
 
+    /**
+     * Helper: switch stage's scene to the one for select data source (file or manual entry?)
+     * @param window
+     * @throws IOException
+     */
     private void goToSelectDataSource(final Window window) throws IOException
     {
                         final Stage stage = (Stage) window; // ugly cast following https://stackoverflow.com/a/31686775
@@ -242,7 +229,11 @@ public final class FXMLController implements Initializable {
 
 
 
-    // TODO could move this to its own class
+    /**
+     * Continue on from selecting which data source (file or 'manual' text entry)
+     * @param event
+     * @throws IOException
+     */
     @FXML
     private void handleDataSrcCntButtonAction(ActionEvent event) throws IOException
     {
@@ -302,6 +293,11 @@ public final class FXMLController implements Initializable {
                     System.out.println(file.getPath());
                     System.out.println();
 
+
+
+
+                    // // // // // TODO implement state
+
                     // TODO read into memory and save that somewhere, somehow
 
                     // TODO popup confirming success, or announcing failure
@@ -323,6 +319,12 @@ public final class FXMLController implements Initializable {
     }
 
 
+    /**
+     * Helper: Set the stage's scene to the one where we select the output sink
+     * (currently, we always write to file)
+     * @param window
+     * @throws IOException
+     */
     private void goToSelectOutputSink(final Window window) throws IOException
     {
                         final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
@@ -336,7 +338,13 @@ public final class FXMLController implements Initializable {
     }
 
 
-    // JavaFX doesn't mind the 'private' modifier
+
+    /**
+     * TODO IS THIS WRONG? WHAT ABOUT handleGoEncodeButtonAction
+     * Finish up: do the actual work
+     * @param event
+     * @throws IOException
+     */
     @FXML
     private void handleEncodeButtonAction(ActionEvent event) throws IOException {
 
@@ -357,9 +365,20 @@ public final class FXMLController implements Initializable {
 
 
 
+    /**
+     * If all is well, progress to next scene
+     */
     @FXML
     private void handleSelectOutputFileButtonAction()
     {
+
+
+
+        // // // // // WHERE DOES THE STATE GO? HOW DO WE DO A FILE-SELECT DIALOG???
+
+
+
+        // // // // //
 
         this.soPathText.setText("TODO");
 
@@ -368,10 +387,69 @@ public final class FXMLController implements Initializable {
 
 
 
+    /**
+     * TODO IS THIS WRONG? WHAT ABOUT handleEncodeButtonAction ???
+     */
     @FXML
     private void handleGoEncodeButtonAction()
     {
         // //
+
+        {
+            int dummy = 42;
+        }
+
+
+
+
+        /*
+
+//        Model.INSTANCE.setDataSet(split);
+//
+//        // TODO exception-handling
+//
+//        final byte[]   msgBytes = Model.INSTANCE.getMessageBytes();
+//        final String[] ds       = Model.INSTANCE.getDataSet();
+//
+//        if ((null == msgBytes) || (null == ds)) {
+//            System.err.println("Failed to initialize a data-source");
+//        } else {
+////            final byte[] messageBytes = Model.INSTANCE.getMessageBytes();
+////            final String[] dataSet = Model.INSTANCE.getDataSet();
+//
+//            //final File file = new File("C:\\Users\\Kingsley\\Documents\\demo.txt"); // // // ANOTHER FILE-SELECT DIALOG...???
+//
+//            // TODO check for unique rows
+//
+//            // TODO check enough rows to encode the message
+//
+//            // Model.INSTANCE.encodeIntoFile(messageBytes, dataSet, file);
+//
+//            Model.INSTANCE.setDataSet(ds);
+        }
+
+
+
+        /*******************************************/
+        /*************** TEMPORARY *****************/
+        /*******************************************/
+
+        /*
+        final Alert alert = new Alert(
+                Alert.AlertType.NONE,
+                "Saved to demo.txt",
+                ButtonType.OK
+        );
+
+        // TODO can we just do 'show' here, as we don't do anything afterwards on the thread?
+        alert.showAndWait(); // TODO go async: use 'show' and a listener
+
+        final Node source = (Node) event.getSource();
+        final Window window = source.getScene().getWindow();
+        final Stage stage = (Stage) window;
+        stage.close();
+
+        */
     }
 
 
