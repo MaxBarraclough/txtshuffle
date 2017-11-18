@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
 import javafx.event.ActionEvent;
@@ -300,20 +301,14 @@ public final class FXMLController implements Initializable {
                         System.out.println(file.getPath());
                         System.out.println();
 
+                        {
+                            // TODO eliminate this awful redundant copy. setDataSet should accept List<String>
+                            final List<String> split = Files.readAllLines(file.toPath());
+                            final String[] arr = (String[])(split.toArray());
+                            Model.INSTANCE.setDataSet(arr);
+                            // final String[] split = text.split("\\r?\\n"); // https://stackoverflow.com/a/454913
+                        }
 
-
-
-
-                        // // // Model.INSTANCE.setDataSet(null);
-                        // // // // // // // //
-
-
-
-
-                        // // // // // TODO implement state
-                        // TODO read into memory and save that somewhere, somehow
-                        // TODO popup confirming success, or announcing failure
-                        // For now, just show success popup
                         final Alert alert = new Alert(
                                 Alert.AlertType.NONE,
                                 "Successfully read data-set file",
