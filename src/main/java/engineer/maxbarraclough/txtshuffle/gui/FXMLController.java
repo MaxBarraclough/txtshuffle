@@ -285,15 +285,16 @@ public final class FXMLController implements Initializable {
 
                 if (null != file) {
                     // assert(!file.isDirectory());
-                    assert (file.isFile());
+                    final boolean isFile = file.isFile();
+                    assert (isFile);
 
+                    if (isFile)
+                    {
                     final long fileLength = file.length();
 
                     System.out.println("You have selected:");
                     System.out.println(file.getPath());
                     System.out.println();
-
-
 
 
                     // // // // // TODO implement state
@@ -311,6 +312,11 @@ public final class FXMLController implements Initializable {
                     alert.showAndWait(); // TODO go async: use 'show' and a listener
 
                     this.goToSelectOutputSink(window);
+                    }
+                    else
+                    {
+                        // // TODO popup saying 'Select a real file please'
+                    }
                 } // else do nothing - user cancelled file-selection
 
             }
