@@ -55,7 +55,9 @@ public final class FXMLController implements Initializable {
 
 
     /**
-     * Handle entering data source
+     * Handle manually entering 'data' text (*not* message)
+     * Do not confuse with handleDataSrcCntButtonAction
+     * which concerns selection of which data source (file or 'manual')
      * @param event
      * @throws IOException
      * @throws engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.NumberTooGreatException
@@ -230,7 +232,10 @@ public final class FXMLController implements Initializable {
 
 
     /**
-     * Continue on from selecting which data source (file or 'manual' text entry)
+     * Continue on from selecting which data source (file or 'manual' text entry).
+     * Transition to the appropriate scene.
+     * Do not confuse with handleEntDsButtonAction
+     * which handles 'manual' data entry finalisation.
      * @param event
      * @throws IOException
      */
@@ -294,6 +299,16 @@ public final class FXMLController implements Initializable {
                         System.out.println("You have selected:");
                         System.out.println(file.getPath());
                         System.out.println();
+
+
+
+
+
+                        // // // Model.INSTANCE.setDataSet(null);
+                        // // // // // // // //
+
+
+
 
                         // // // // // TODO implement state
                         // TODO read into memory and save that somewhere, somehow
