@@ -304,7 +304,9 @@ public final class FXMLController implements Initializable {
                         {
                             // TODO eliminate this awful redundant copy. setDataSet should accept List<String>
                             final List<String> split = Files.readAllLines(file.toPath());
-                            final String[] arr = (String[])(split.toArray());
+                            final int count = split.size();
+                            final String[] arr = new String[count];
+                            split.toArray(arr);
                             Model.INSTANCE.setDataSet(arr);
                             // final String[] split = text.split("\\r?\\n"); // https://stackoverflow.com/a/454913
                         }
