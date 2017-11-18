@@ -319,7 +319,13 @@ public final class FXMLController implements Initializable {
 
                         this.goToSelectOutputSink(window);
                     } else {
-                        // // TODO popup saying 'Select a real file please'
+                        final Alert alert = new Alert(
+                                Alert.AlertType.NONE,
+                                "Please select a file",
+                                ButtonType.OK
+                        );
+
+                        alert.showAndWait(); // TODO go async: use 'show' and a listener
                     }
                 } // else do nothing - user cancelled file-selection
 
