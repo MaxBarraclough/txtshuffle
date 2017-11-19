@@ -17,13 +17,14 @@ import java.nio.file.Files;
  */
 public final class Model {
 
-    public static final Model INSTANCE = new Model(); // // // TODO this should probably live in the controller instead
+    public static final Model INSTANCE = new Model();
+// // // TODO this should probably live in the controller instead
 
     private Model() {
     }
 
     private String[] dataSet;
-    public void setDataSet(String[] ds) {
+    public void setDataSet(final String[] ds) {
         this.dataSet = ds;
     }
     public String[] getDataSet() {
@@ -32,13 +33,23 @@ public final class Model {
     
 
     private byte[] messageBytes;
-    public void setMessageBytes(byte[] m) {
+    public void setMessageBytes(final byte[] m) {
         this.messageBytes = m;
     }
     public byte[] getMessageBytes() {
         return this.messageBytes;
     }
 
+
+    private File file;
+    public void setFile(final File f)
+    {
+        this.file = f;
+    }
+    public File getFile()
+    {
+        return this.file;
+    }
 
 
     /**

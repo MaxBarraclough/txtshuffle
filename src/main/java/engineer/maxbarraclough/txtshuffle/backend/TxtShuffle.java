@@ -66,19 +66,36 @@ public final class TxtShuffle {
 
 	// TODO param name consistency
 
+	public static String[] encodeSmallNumberIntoFileData(final String filePath, final int secretNum)
+			throws IOException, NumberTooGreatException
+        {
+            final String[] ret = encodeNumberIntoFileData(filePath, BigInteger.valueOf(secretNum));
+            return ret;
+        }
 
-	public static String[] encodeSmallNumberIntoData(final String filePath, final int secretNum)
+	public static String[] encodeNumberIntoFileData(final String filePath, final BigInteger secretNum_BI)
 			throws IOException, NumberTooGreatException
 	{
 		final String[] strs = TxtShuffle.readFileIntoStringArr(filePath);
+		final String[] ret = encodeNumberIntoData(strs, secretNum_BI);
+                return ret;
+	}
 
-		throwNtgeIfTooGreat(strs.length, BigInteger.valueOf(secretNum));
+        public static String[] encodeBytesIntoData(final String[] strs, final byte[] bytes)
+			throws NumberTooGreatException
+        {
+            final BigInteger bi = new BigInteger(bytes);
+            final String[] ret = encodeNumberIntoData(strs, bi);
+            return ret;
+        }
 
 
-		// TODO this won't be necessary once everything is BigInteger
+        public static String[] encodeNumberIntoData(final String[] strs, final BigInteger secretNum_BI)
+			throws NumberTooGreatException
+	{
+		throwNtgeIfTooGreat(strs.length, secretNum_BI);
+
 		//// Nasty business converting from BigInteger[] to int[] ////
-
-		final BigInteger secretNum_BI = BigInteger.valueOf(secretNum);
 
 		final int[] compact
 		  = VectorConversions.intToCompactVector(strs.length, secretNum_BI);
@@ -100,6 +117,8 @@ public final class TxtShuffle {
 
 		return strsEncodingNum;
 	}
+
+
 
 
 
@@ -184,7 +203,7 @@ if (false) {
 
 		// surprisingly hard to get a String[] out of a List<String>
 //		final Object[] retObjs = lines.toArray(); // yes, yet another avoidable copy
-//		final String[] ret = (String[])retObjs;
+//		final String[] ret = (String[])retObjs; // no! illegal! use the other toArray(1)
 
 		final String[] ret = new String[lines.size()];
 
@@ -192,6 +211,9 @@ if (false) {
 		{
 			ret[i] = lines.get(i);
 		}
+
+
+                // // // TODO ELIMINATE POINTLESS COPY
 
 		return ret;
 	}

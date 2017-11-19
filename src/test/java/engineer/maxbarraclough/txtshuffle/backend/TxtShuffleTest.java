@@ -102,7 +102,7 @@ public final class TxtShuffleTest {
 		final BigInteger secretNum_BI = BigInteger.valueOf(secretNum);
 		// 40319; // 40320 is fact(8) and is the lowest too-high integer
 
-		final String[] encoded = TxtShuffle.encodeSmallNumberIntoData(
+		final String[] encoded = TxtShuffle.encodeSmallNumberIntoFileData(
                         "src/test/java/engineer/maxbarraclough/txtshuffle/backend/example1.txt",
                         secretNum
                 );

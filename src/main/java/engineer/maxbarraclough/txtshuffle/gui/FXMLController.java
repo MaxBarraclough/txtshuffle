@@ -5,13 +5,19 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -386,15 +392,6 @@ public final class FXMLController implements Initializable {
 
 
 
-
-
-
-
-
-
-
-
-
     // // // // // // // // DO WE NEED BOTH THESE METHODS???????????
 
     /**
@@ -406,19 +403,44 @@ public final class FXMLController implements Initializable {
         final FileChooser fc = new FileChooser();
         fc.setTitle("Select output file");
 
+        // following https://docs.oracle.com/javase/8/javafx/api/javafx/stage/FileChooser.html
+        fc.getExtensionFilters().addAll(
+          new FileChooser.ExtensionFilter("Text files", "*.txt"),
+          new FileChooser.ExtensionFilter("All files", "*.*")
+        );
+
         // FXML binding can only be used for entities within the scene
         // https://stackoverflow.com/a/33933973
         final Node source = (Node) event.getSource();
         final Window window = source.getScene().getWindow();
 
-        final File file = fc.showOpenDialog(window); // can return null
+        final File file = fc.showSaveDialog(window); // can return null
 
         if (null != file) {
             // assert(!file.isDirectory());
-            final boolean isFile = file.isFile();
+            final boolean existingDir = file.exists() && file.isDirectory();
 
-            if (isFile) {
-            } else {
+            if (!existingDir) {
+
+                if (file.exists()) {
+                    final Alert alert = new Alert(
+                            Alert.AlertType.NONE,
+                            "Overwrite this file?",
+                            ButtonType.YES,
+                            ButtonType.NO
+                    );
+
+                    final Optional<ButtonType> bt = alert.showAndWait(); // TODO go async: use 'show' and a listener
+                    final boolean goAhead = bt.get().equals(ButtonType.YES);
+                    if (goAhead) {
+                        Model.INSTANCE.setFile(file);
+                    }
+                }
+                else
+                {
+                    Model.INSTANCE.setFile(file);
+                }
+            } else { // then existingDir == true
                 final Alert alert = new Alert(
                         Alert.AlertType.NONE,
                         "Please select a file",
@@ -429,10 +451,6 @@ public final class FXMLController implements Initializable {
             }
         } // else user canceled - failed to select an output file
 
-        // // // // //
-        // this.soPathText.setText("TODO");
-
-        // //
     }
 
 
@@ -443,54 +461,80 @@ public final class FXMLController implements Initializable {
      * the wizard for the encode process.
      */
     @FXML
-    private void handleGoEncodeButtonAction() // // TODO why no arg? ActionEvent event
+    private void handleGoEncodeButtonAction(final ActionEvent event)
     {
-        // TODO exception-handling
-
         final byte[]   msgBytes = Model.INSTANCE.getMessageBytes();
         final String[] ds       = Model.INSTANCE.getDataSet();
 
         if ((null == msgBytes) || (null == ds)) {
             System.err.println("Failed to initialize a data-source");
         } else {
-            //final File file = new File("C:\\Users\\Kingsley\\Documents\\demo.txt"); // // // ANOTHER FILE-SELECT DIALOG...???
 
-            // //
+            try {
+                final String[] outputStrs =
+                engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.encodeBytesIntoData(
+                        Model.INSTANCE.getDataSet(),
+                        Model.INSTANCE.getMessageBytes()
+                ); // can throw NumberTooGreatException only
 
+                // // TODO get file from Model.INSTANCE
+                // // // TODO write to file
 
+                final File outFile = Model.INSTANCE.getFile();
+                assert(null != outFile);
 
+//              We already got the go-ahead to overwrite, if applicable
+//              asList doesn't do a copy, it's just indirection. Java arrays aren't Iterable
+                java.nio.file.Files.write(outFile.toPath(), Arrays.asList(outputStrs));//, Charset.defaultCharset());
+                        // these three are the default:
+//                            java.nio.file.StandardOpenOption.CREATE_NEW,
+//                            java.nio.file.StandardOpenOption.WRITE,
+//                            java.nio.file.StandardOpenOption.TRUNCATE_EXISTING
 
-            // //
+                // can throw IOException only
+//                try (final FileWriter fw = new FileWriter(outFile)) {
+//                    for (String str : outputStrs) {
+//                        fw.write(str);
+//                    }
+//                }
 
+                final Alert alert = new Alert(
+                        Alert.AlertType.NONE,
+                        "Saved",
+                        ButtonType.OK
+                );
+                alert.showAndWait(); // TODO go async: use 'show' and a listener
 
+                final Node source = (Node) event.getSource();
+                final Window window = source.getScene().getWindow();
+                final Stage stage = (Stage) window;
+                stage.close();
 
+            } catch (IOException ex) {
+                Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+                final Alert alert = new Alert(
+                        Alert.AlertType.NONE,
+                        "Error writing to file",
+                        ButtonType.OK
+                );
+                alert.showAndWait(); // TODO go async: use 'show' and a listener
+            }
+            catch (TxtShuffle.NumberTooGreatException ex) {
+                Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+                final Alert alert = new Alert(
+                        Alert.AlertType.NONE,
+                        "Input too big to encode",
+                        ButtonType.OK
+                );
+                alert.showAndWait(); // TODO go async: use 'show' and a listener
+            }
 
-            // TODO check for unique rows
+            // TODO check for unique rows on file selection/data-entry
 
-            // TODO check enough rows to encode the message
+            // TODO check enough rows to encode the message earlier
 
             // // Model.INSTANCE.encodeIntoFile(msgBytes, ds, this.);
-
         }
-
-        /*************** TEMPORARY *****************/
-
-        //*
-        final Alert alert = new Alert(
-                Alert.AlertType.NONE,
-                "Saved to demo.txt",
-                ButtonType.OK
-        );
-
-        // TODO can we just do 'show' here, as we don't do anything afterwards on the thread?
-        alert.showAndWait(); // TODO go async: use 'show' and a listener
-
-        final Node source = (Node) event.getSource();
-        final Window window = source.getScene().getWindow();
-        final Stage stage = (Stage) window;
-        stage.close();
-
-        /**/
     }
 
 
