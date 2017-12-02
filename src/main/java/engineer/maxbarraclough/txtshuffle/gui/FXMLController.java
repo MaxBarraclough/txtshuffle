@@ -545,8 +545,27 @@ public final class FXMLController implements Initializable {
 
 
     @FXML
-    private void handleDecodeButtonAction(ActionEvent event) {
-        System.out.println("[Show decode wizard]");
+    private void handleDecodeButtonAction(final ActionEvent event) throws IOException {
+                final Parent sdssParent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectDecodeSource.fxml"));
+                final Scene sdsScene = new Scene(sdssParent);
+                sdsScene.getStylesheets().add("/styles/Styles.css");
+
+                final Stage stage = new Stage();
+
+                // this call must be made before show()
+                stage.initModality(Modality.APPLICATION_MODAL); // https://docs.oracle.com/javase/8/javafx/api/javafx/stage/Stage.html
+
+                stage.setTitle("Select Source");
+                stage.setResizable(false);
+                stage.setScene(sdsScene);
+                stage.show();
+//        System.out.println("[Show decode wizard]");
+    }
+
+    @FXML
+    public void handleDecSrcCntButtonAction(final ActionEvent event)
+    {
+        System.out.println("[Show next step]");
     }
 
     @Override
