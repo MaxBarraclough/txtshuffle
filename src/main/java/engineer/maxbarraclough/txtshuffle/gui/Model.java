@@ -23,6 +23,14 @@ public final class Model {
     private Model() {
     }
 
+    private String[] encodedDataSet;
+    public void setEncodedDataSet(final String[] ds) {
+        this.encodedDataSet = ds;
+    }
+    public String[] getEncodedDataSet() {
+        return this.encodedDataSet;
+    }
+
     private String[] dataSet;
     public void setDataSet(final String[] ds) {
         this.dataSet = ds;

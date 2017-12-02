@@ -47,11 +47,17 @@ public final class FXMLController implements Initializable {
     @FXML private RadioButton sdsFromManualRadio;
     @FXML private RadioButton sdsFromFileRadio;
 
+    // select source of encoded data (aka decode data)
+    @FXML private RadioButton sdcsFromManualRadio;
+    @FXML private RadioButton sdcsFromFileRadio;
+
     @FXML private ToggleGroup smsTg;
     @FXML private ToggleGroup dsTg;
+    @FXML private ToggleGroup dcsTg;
 
     @FXML private TextArea edsTextArea;
     @FXML private TextArea emTextArea;
+    @FXML private TextArea edcdsTextArea;
 
     @FXML private Text soPathText;
 
@@ -562,11 +568,116 @@ public final class FXMLController implements Initializable {
 //        System.out.println("[Show decode wizard]");
     }
 
+
+
     @FXML
-    public void handleDecSrcCntButtonAction(final ActionEvent event)
+    public void handleDecSrcCntButtonAction(final ActionEvent event) throws IOException
     {
-        System.out.println("[Show next step]");
+        assert(null != this.sdcsFromManualRadio);
+        assert(null != this.sdcsFromFileRadio);
+
+        final Toggle tog = this.dcsTg.getSelectedToggle();
+
+        if (null == tog)
+        {
+            final Alert alert = new Alert(
+                    Alert.AlertType.NONE,
+                    "Select an option before continuing",
+                    ButtonType.OK
+            );
+
+            alert.showAndWait(); // TODO go async: use 'show' and a listener
+        }
+        else
+        {
+            final boolean b1 = (tog == this.sdcsFromManualRadio);
+            final boolean b2 = (tog == this.sdcsFromFileRadio);
+
+            assert(b1 != b2);
+
+            if (b1) {
+                    final Node source = (Node)(event.getSource());
+                    final Window window = source.getScene().getWindow();
+
+                    final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
+                    stage.setTitle("Enter Encoded Data Text");
+
+                    // // //
+                    final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/EnterEncodedDataSetText.fxml"));
+                    final Scene rootScene = new Scene(rootParent);
+                    rootScene.getStylesheets().add("/styles/Styles.css");
+
+                    stage.setScene(rootScene);
+
+            } else { // from file
+                final FileChooser fc = new FileChooser();
+                fc.setTitle("Select data-set file");
+
+                // FXML binding can only be used for entities within the scene
+                // https://stackoverflow.com/a/33933973
+                final Node source = (Node)event.getSource();
+                final Window window = source.getScene().getWindow();
+
+                final File file = fc.showOpenDialog(window); // can return null
+
+                if (null != file) {
+                    // assert(!file.isDirectory());
+                    final boolean isFile = file.isFile();
+
+                    if (isFile) {
+                        final long fileLength = file.length();
+
+                        System.out.println("You have selected:");
+                        System.out.println(file.getPath());
+                        System.out.println();
+
+                        {
+                            // TODO eliminate this awful redundant copy. setDataSet should accept List<String>
+                            final List<String> split = Files.readAllLines(file.toPath());
+                            final int count = split.size();
+                            final String[] arr = new String[count];
+                            split.toArray(arr);
+
+                            Model.INSTANCE.setEncodedDataSet(arr);
+
+                            // final String[] split = text.split("\\r?\\n"); // https://stackoverflow.com/a/454913
+                        }
+
+                        final Alert alert = new Alert(
+                                Alert.AlertType.NONE,
+                                "Successfully read encoded file",
+                                ButtonType.OK
+                        );
+
+                        alert.showAndWait(); // TODO go async: use 'show' and a listener
+
+                        this.goToSelectOutputSink(window);
+                    } else {
+                        final Alert alert = new Alert(
+                                Alert.AlertType.NONE,
+                                "Please select a file",
+                                ButtonType.OK
+                        );
+
+                        alert.showAndWait(); // TODO go async: use 'show' and a listener
+                    }
+                } // else do nothing - user cancelled file-selection
+
+            }
+        }
+
     }
+
+
+
+    @FXML
+    void handleEntEncDsButtonAction(final ActionEvent event) {
+        System.out.println("[Data is]");
+        System.out.println(this.edcdsTextArea.getText());
+        System.out.println("[Next step]");
+    }
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
