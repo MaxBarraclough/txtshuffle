@@ -423,6 +423,7 @@ public final class FXMLController implements Initializable {
             if (!existingDir) {
 
                 if (file.exists()) {
+                    /* // No need for this, JavaFX does the prompt for us
                     final Alert alert = new Alert(
                             Alert.AlertType.NONE,
                             "Overwrite this file?",
@@ -432,6 +433,8 @@ public final class FXMLController implements Initializable {
 
                     final Optional<ButtonType> bt = alert.showAndWait(); // TODO go async: use 'show' and a listener
                     final boolean goAhead = bt.get().equals(ButtonType.YES);
+                    */
+                    final boolean goAhead = true;
                     if (goAhead) {
                         Model.INSTANCE.setFile(file);
                     }
