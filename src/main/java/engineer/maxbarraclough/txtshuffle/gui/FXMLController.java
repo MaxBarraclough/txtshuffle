@@ -39,6 +39,9 @@ import javafx.stage.Window;
 
 public final class FXMLController implements Initializable {
 
+    private enum FinalAction {ENCODE, DECODE}
+    private FinalAction finalAction = null;
+
     // 'select message source' ...
     @FXML private RadioButton smsFromManualRadio;
     @FXML private RadioButton smsFromFileRadio;
@@ -329,7 +332,7 @@ public final class FXMLController implements Initializable {
 
                         alert.showAndWait(); // TODO go async: use 'show' and a listener
 
-                        this.goToSelectOutputSink(window);
+                        this.goToSelectOutputSink(window, FinalAction.ENCODE);
                     } else {
                         final Alert alert = new Alert(
                                 Alert.AlertType.NONE,
@@ -353,8 +356,10 @@ public final class FXMLController implements Initializable {
      * @param window
      * @throws IOException
      */
-    private void goToSelectOutputSink(final Window window) throws IOException
+    private void goToSelectOutputSink(final Window window, final FinalAction fa) throws IOException
     {
+                        this.finalAction = fa;
+
                         final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
                         stage.setTitle("Select Output");
 
@@ -464,6 +469,11 @@ public final class FXMLController implements Initializable {
 
 
 
+
+
+        // // // // // // // RENAME method now to handle decode, too
+
+
     /**
      * Do final encode work.
      * Do not confuse with handleEncodeButtonAction which begins
@@ -480,14 +490,13 @@ public final class FXMLController implements Initializable {
         } else {
 
             try {
-                final String[] outputStrs =
-                engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.encodeBytesIntoData(
+
+                if (this.finalAction.equals(FinalAction.ENCODE)) // throws if finalAction is null. We want that.
+                {
+                final String[] outputStrs = engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.encodeBytesIntoData(
                         Model.INSTANCE.getDataSet(),
                         Model.INSTANCE.getMessageBytes()
                 ); // can throw NumberTooGreatException only
-
-                // // TODO get file from Model.INSTANCE
-                // // // TODO write to file
 
                 final File outFile = Model.INSTANCE.getFile();
                 assert(null != outFile);
@@ -518,6 +527,17 @@ public final class FXMLController implements Initializable {
                 final Window window = source.getScene().getWindow();
                 final Stage stage = (Stage) window;
                 stage.close();
+
+                }
+                else
+                {
+                    // // // // //
+                    // // //engineer.maxbarraclough.txtshuffle.backend.TxtShuffle
+
+                    System.out.println("TODO DECODE");
+
+                    return; // // //
+                }
 
             } catch (IOException ex) {
                 Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
@@ -651,7 +671,7 @@ public final class FXMLController implements Initializable {
 
                         alert.showAndWait(); // TODO go async: use 'show' and a listener
 
-                        this.goToSelectOutputSink(window);
+                        this.goToSelectOutputSink(window, FinalAction.DECODE);
                     } else {
                         final Alert alert = new Alert(
                                 Alert.AlertType.NONE,
