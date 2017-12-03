@@ -480,10 +480,9 @@ public final class FXMLController implements Initializable {
      * the wizard for the encode process.
      */
     @FXML
-    private void handleGoEncodeButtonAction(final ActionEvent event)
-    {
-        final byte[]   msgBytes = Model.INSTANCE.getMessageBytes();
-        final String[] ds       = Model.INSTANCE.getDataSet();
+    private void handleGoEncodeButtonAction(final ActionEvent event) {
+        final byte[] msgBytes = Model.INSTANCE.getMessageBytes();
+        final String[] ds = Model.INSTANCE.getDataSet();
 
         if ((null == msgBytes) || (null == ds)) {
             System.err.println("Failed to initialize a data-source");
@@ -493,44 +492,41 @@ public final class FXMLController implements Initializable {
 
                 if (this.finalAction.equals(FinalAction.ENCODE)) // throws if finalAction is null. We want that.
                 {
-                final String[] outputStrs = engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.encodeBytesIntoData(
-                        Model.INSTANCE.getDataSet(),
-                        Model.INSTANCE.getMessageBytes()
-                ); // can throw NumberTooGreatException only
+                    final String[] outputStrs = engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.encodeBytesIntoData(
+                            Model.INSTANCE.getDataSet(),
+                            Model.INSTANCE.getMessageBytes()
+                    ); // can throw NumberTooGreatException only
 
-                final File outFile = Model.INSTANCE.getFile();
-                assert(null != outFile);
+                    final File outFile = Model.INSTANCE.getFile();
+                    assert (null != outFile);
 
 //              We already got the go-ahead to overwrite, if applicable
 //              asList doesn't do a copy, it's just indirection. Java arrays aren't Iterable
-                java.nio.file.Files.write(outFile.toPath(), Arrays.asList(outputStrs));//, Charset.defaultCharset());
-                        // these three are the default:
+                    java.nio.file.Files.write(outFile.toPath(), Arrays.asList(outputStrs));//, Charset.defaultCharset());
+                    // these three are the default:
 //                            java.nio.file.StandardOpenOption.CREATE_NEW,
 //                            java.nio.file.StandardOpenOption.WRITE,
 //                            java.nio.file.StandardOpenOption.TRUNCATE_EXISTING
 
-                // can throw IOException only
+                    // can throw IOException only
 //                try (final FileWriter fw = new FileWriter(outFile)) {
 //                    for (String str : outputStrs) {
 //                        fw.write(str);
 //                    }
 //                }
+                    final Alert alert = new Alert(
+                            Alert.AlertType.NONE,
+                            "Saved",
+                            ButtonType.OK
+                    );
+                    alert.showAndWait(); // TODO go async: use 'show' and a listener
 
-                final Alert alert = new Alert(
-                        Alert.AlertType.NONE,
-                        "Saved",
-                        ButtonType.OK
-                );
-                alert.showAndWait(); // TODO go async: use 'show' and a listener
+                    final Node source = (Node) event.getSource();
+                    final Window window = source.getScene().getWindow();
+                    final Stage stage = (Stage) window;
+                    stage.close();
 
-                final Node source = (Node) event.getSource();
-                final Window window = source.getScene().getWindow();
-                final Stage stage = (Stage) window;
-                stage.close();
-
-                }
-                else
-                {
+                } else {
                     // // // // //
                     // // //engineer.maxbarraclough.txtshuffle.backend.TxtShuffle
 
@@ -547,8 +543,7 @@ public final class FXMLController implements Initializable {
                         ButtonType.OK
                 );
                 alert.showAndWait(); // TODO go async: use 'show' and a listener
-            }
-            catch (TxtShuffle.NumberTooGreatException ex) {
+            } catch (TxtShuffle.NumberTooGreatException ex) {
                 Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
                 final Alert alert = new Alert(
                         Alert.AlertType.NONE,
@@ -559,9 +554,7 @@ public final class FXMLController implements Initializable {
             }
 
             // TODO check for unique rows on file selection/data-entry
-
             // TODO check enough rows to encode the message earlier
-
             // // Model.INSTANCE.encodeIntoFile(msgBytes, ds, this.);
         }
     }
