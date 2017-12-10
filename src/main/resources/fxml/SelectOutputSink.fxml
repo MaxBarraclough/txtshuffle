@@ -6,7 +6,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="293.0" prefWidth="353.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="engineer.maxbarraclough.txtshuffle.gui.FXMLController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="293.0" prefWidth="353.0"
+            xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" >
+            <!-- fx:controller="engineer.maxbarraclough.txtshuffle.gui.FXMLController"> -->
    <children>
 
       <Button layoutX="371.0" layoutY="301.0" mnemonicParsing="false" onAction="#handleGoEncodeButtonAction" text="Go" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />

@@ -297,7 +297,10 @@ public final class FXMLController implements Initializable {
                     final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
                     stage.setTitle("Enter Data-Set Text");
 
-                    final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/EnterDataSetText.fxml"));
+                    final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/fxml/EnterDataSetText.fxml"));
+                    loader.setController(this);
+                    final Parent rootParent = loader.load();
+
                     final Scene rootScene = new Scene(rootParent);
                     rootScene.getStylesheets().add("/styles/Styles.css");
 
@@ -374,7 +377,9 @@ public final class FXMLController implements Initializable {
                         final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
                         stage.setTitle("Select Output");
 
-                        final Parent parent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectOutputSink.fxml"));
+                        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/fxml/SelectOutputSink.fxml"));
+                        loader.setController(this);
+                        final Parent parent = loader.load();
                         final Scene rootScene = new Scene(parent);
                         rootScene.getStylesheets().add("/styles/Styles.css");
 
@@ -574,7 +579,10 @@ public final class FXMLController implements Initializable {
 
     @FXML
     private void handleDecodeButtonAction(final ActionEvent event) throws IOException {
-                final Parent sdssParent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectDecodeSource.fxml"));
+
+                final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/fxml/SelectDecodeSource.fxml"));
+                loader.setController(this);
+                final Parent sdssParent = loader.load();
                 final Scene sdsScene = new Scene(sdssParent);
                 sdsScene.getStylesheets().add("/styles/Styles.css");
 
@@ -624,8 +632,9 @@ public final class FXMLController implements Initializable {
                     final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
                     stage.setTitle("Enter Encoded Data Text");
 
-                    // // //
-                    final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/EnterEncodedDataSetText.fxml"));
+                    final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/fxml/EnterEncodedDataSetText.fxml"));
+                    loader.setController(this);
+                    final Parent rootParent = loader.load();
                     final Scene rootScene = new Scene(rootParent);
                     rootScene.getStylesheets().add("/styles/Styles.css");
 
