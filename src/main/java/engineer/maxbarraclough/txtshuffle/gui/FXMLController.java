@@ -498,55 +498,55 @@ public final class FXMLController implements Initializable {
         final byte[] msgBytes = Model.INSTANCE.getMessageBytes();
         final String[] ds = Model.INSTANCE.getDataSet();
 
-        if ((null == msgBytes) || (null == ds)) {
-            System.err.println("Failed to initialize a data-source");
-        } else {
+        {
 
             try {
 
                 if (this.finalAction.equals(FinalAction.ENCODE)) // throws if finalAction is null. We want that.
                 {
-                    final String[] outputStrs = engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.encodeBytesIntoData(
-                            Model.INSTANCE.getDataSet(),
-                            Model.INSTANCE.getMessageBytes()
-                    ); // can throw NumberTooGreatException only
+                    if ((null == msgBytes) || (null == ds)) {
+                        System.err.println("Failed to initialize a data-source");
+                    } else {
+                        final String[] outputStrs = engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.encodeBytesIntoData(
+                                Model.INSTANCE.getDataSet(),
+                                Model.INSTANCE.getMessageBytes()
+                        ); // can throw NumberTooGreatException only
 
-                    final File outFile = Model.INSTANCE.getFile();
-                    assert (null != outFile);
+                        final File outFile = Model.INSTANCE.getFile();
+                        assert (null != outFile);
 
 //              We already got the go-ahead to overwrite, if applicable
 //              asList doesn't do a copy, it's just indirection. Java arrays aren't Iterable
-                    java.nio.file.Files.write(outFile.toPath(), Arrays.asList(outputStrs));//, Charset.defaultCharset());
-                    // these three are the default:
+                        java.nio.file.Files.write(outFile.toPath(), Arrays.asList(outputStrs));//, Charset.defaultCharset());
+                        // these three are the default:
 //                            java.nio.file.StandardOpenOption.CREATE_NEW,
 //                            java.nio.file.StandardOpenOption.WRITE,
 //                            java.nio.file.StandardOpenOption.TRUNCATE_EXISTING
 
-                    // can throw IOException only
+                        // can throw IOException only
 //                try (final FileWriter fw = new FileWriter(outFile)) {
 //                    for (String str : outputStrs) {
 //                        fw.write(str);
 //                    }
 //                }
-                    final Alert alert = new Alert(
-                            Alert.AlertType.NONE,
-                            "Saved",
-                            ButtonType.OK
-                    );
-                    alert.showAndWait(); // TODO go async: use 'show' and a listener
+                        final Alert alert = new Alert(
+                                Alert.AlertType.NONE,
+                                "Saved",
+                                ButtonType.OK
+                        );
+                        alert.showAndWait(); // TODO go async: use 'show' and a listener
 
-                    final Node source = (Node) event.getSource();
-                    final Window window = source.getScene().getWindow();
-                    final Stage stage = (Stage) window;
-                    stage.close();
-
+                        final Node source = (Node) event.getSource();
+                        final Window window = source.getScene().getWindow();
+                        final Stage stage = (Stage) window;
+                        stage.close();
+                    }
                 } else {
-                    // // // // //
                     // // //engineer.maxbarraclough.txtshuffle.backend.TxtShuffle
 
-                    System.out.println("TODO DECODE");
+                    final String[] encodedDS = Model.INSTANCE.getEncodedDataSet();
 
-                    return; // // //
+                    System.out.println("TODO DECODE");
                 }
 
             } catch (IOException ex) {
