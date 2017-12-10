@@ -529,25 +529,36 @@ public final class FXMLController implements Initializable {
 //                        fw.write(str);
 //                    }
 //                }
-                        final Alert alert = new Alert(
-                                Alert.AlertType.NONE,
-                                "Saved",
-                                ButtonType.OK
-                        );
-                        alert.showAndWait(); // TODO go async: use 'show' and a listener
-
-                        final Node source = (Node) event.getSource();
-                        final Window window = source.getScene().getWindow();
-                        final Stage stage = (Stage) window;
-                        stage.close();
                     }
-                } else {
-                    // // //engineer.maxbarraclough.txtshuffle.backend.TxtShuffle
-
+                } else { // we're doing a decode
                     final String[] encodedDS = Model.INSTANCE.getEncodedDataSet();
 
-                    System.out.println("TODO DECODE");
+                    // // TODO this heavy-lifting should be hidden away in the backend class
+                    final java.math.BigInteger bi =
+                            engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.retrieveNumberFromData(encodedDS);
+
+                    final byte[] bytes = bi.toByteArray();
+
+                    final File outFile = Model.INSTANCE.getFile();
+                    assert (null != outFile);
+
+//              We already got the go-ahead to overwrite, if applicable
+//              asList doesn't do a copy, it's just indirection. Java arrays aren't Iterable
+                    java.nio.file.Files.write(outFile.toPath(), bytes);
                 }
+
+                final Alert alert = new Alert(
+                        Alert.AlertType.NONE,
+                        "Saved",
+                        ButtonType.OK
+                );
+                alert.showAndWait(); // TODO go async: use 'show' and a listener
+
+                final Node source = (Node) event.getSource();
+                final Window window = source.getScene().getWindow();
+                final Stage stage = (Stage) window;
+                stage.close();
+
 
             } catch (IOException ex) {
                 Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
