@@ -533,7 +533,6 @@ public final class FXMLController implements Initializable {
                 } else { // we're doing a decode
                     final String[] encodedDS = Model.INSTANCE.getEncodedDataSet();
 
-                    // // TODO this heavy-lifting should be hidden away in the backend class
                     final java.math.BigInteger bi =
                             engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.retrieveNumberFromData(encodedDS);
 
@@ -577,10 +576,6 @@ public final class FXMLController implements Initializable {
                 );
                 alert.showAndWait(); // TODO go async: use 'show' and a listener
             }
-
-            // TODO check for unique rows on file selection/data-entry
-            // TODO check enough rows to encode the message earlier
-            // // Model.INSTANCE.encodeIntoFile(msgBytes, ds, this.);
         }
     }
 
