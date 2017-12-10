@@ -39,6 +39,11 @@ import javafx.stage.Window;
 
 public final class FXMLController implements Initializable {
 
+    public FXMLController(Void dummy) {
+
+    } // block Java sythesising a default constructor
+    // public FXMLController() { } // don't define this, to block automatic instantiation by JavaFX
+
     private enum FinalAction {ENCODE, DECODE}
     private FinalAction finalAction = null;
 

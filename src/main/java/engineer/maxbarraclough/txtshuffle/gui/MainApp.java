@@ -6,6 +6,7 @@ import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 
@@ -26,15 +27,27 @@ public final class MainApp extends Application {
         // This stuff *must* be done here, *not* in 'init' or in ctor,
         // for execution on correct thread https://www.javaworld.com/article/3057072/
 
+
+
+        // // //
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/fxml/Scene.fxml"));
+        final FXMLController controller = new FXMLController(null); // we only ever need this one instance
+        loader.setController(controller); // // //
+        // // //
+
         // getResource plays nice with JAR packaging, unlike file streams https://stackoverflow.com/a/2343224
-        final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/Scene.fxml"));
-        final Scene rootScene = new Scene(rootParent);
-        rootScene.getStylesheets().add("/styles/Styles.css");
+// // NOOOPE NOT ALLOWED    final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/Scene.fxml"));
+
+        final VBox rootVBox = loader.load();
+
+        // final Scene rootScene = new Scene(rootParent);
+        rootVBox.getStylesheets().add("/styles/Styles.css");
 
         stage.setTitle("txtshuffle");
         stage.setResizable(false);
 
-        stage.setScene(rootScene);
+        final Scene scene = new Scene(rootVBox);
+        stage.setScene(scene);
         stage.show();
     }
 

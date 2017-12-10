@@ -11,7 +11,10 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="engineer.maxbarraclough.txtshuffle.gui.FXMLController">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/9.0.1"
+      xmlns:fx="http://javafx.com/fxml/1" >
+     <!-- fx:controller="engineer.maxbarraclough.txtshuffle.gui.FXMLController" > -->
+
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
