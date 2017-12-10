@@ -28,25 +28,23 @@ public final class MainApp extends Application {
         // for execution on correct thread https://www.javaworld.com/article/3057072/
 
 
-
-        // // //
+        // Following https://stackoverflow.com/a/30815504
         final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/fxml/Scene.fxml"));
         final FXMLController controller = new FXMLController(null); // we only ever need this one instance
-        loader.setController(controller); // // //
-        // // //
+        loader.setController(controller);
 
         // getResource plays nice with JAR packaging, unlike file streams https://stackoverflow.com/a/2343224
 // // NOOOPE NOT ALLOWED    final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/Scene.fxml"));
 
         final VBox rootVBox = loader.load();
+        final Scene scene = new Scene(rootVBox);
 
         // final Scene rootScene = new Scene(rootParent);
-        rootVBox.getStylesheets().add("/styles/Styles.css");
+        scene.getStylesheets().add("/styles/Styles.css");
 
         stage.setTitle("txtshuffle");
         stage.setResizable(false);
 
-        final Scene scene = new Scene(rootVBox);
         stage.setScene(scene);
         stage.show();
     }
