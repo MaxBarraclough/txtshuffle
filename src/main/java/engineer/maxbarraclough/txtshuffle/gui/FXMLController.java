@@ -220,16 +220,18 @@ public final class FXMLController implements Initializable {
      * @param window
      * @throws IOException
      */
-    private void goToEnterMessageText(final Window window) throws IOException
-    {
-                    final Stage stage = (Stage) window; // ugly cast following https://stackoverflow.com/a/31686775
-                    stage.setTitle("Enter Message Text");
+    private void goToEnterMessageText(final Window window) throws IOException {
+        final Stage stage = (Stage) window; // ugly cast following https://stackoverflow.com/a/31686775
+        stage.setTitle("Enter Message Text");
 
-                    final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/EnterMessageText.fxml"));
-                    final Scene rootScene = new Scene(rootParent);
-                    rootScene.getStylesheets().add("/styles/Styles.css");
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/fxml/EnterMessageText.fxml"));
+        loader.setController(this);
 
-                    stage.setScene(rootScene);
+        final Parent rootParent = loader.load();
+        final Scene rootScene = new Scene(rootParent);
+        rootScene.getStylesheets().add("/styles/Styles.css");
+
+        stage.setScene(rootScene);
     }
 
 
@@ -238,16 +240,18 @@ public final class FXMLController implements Initializable {
      * @param window
      * @throws IOException
      */
-    private void goToSelectDataSource(final Window window) throws IOException
-    {
-                        final Stage stage = (Stage) window; // ugly cast following https://stackoverflow.com/a/31686775
-                        stage.setTitle("Select Data-Set Source");
+    private void goToSelectDataSource(final Window window) throws IOException {
+        final Stage stage = (Stage) window; // ugly cast following https://stackoverflow.com/a/31686775
+        stage.setTitle("Select Data-Set Source");
 
-                        final Parent rootParent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
-                        final Scene rootScene = new Scene(rootParent);
-                        rootScene.getStylesheets().add("/styles/Styles.css");
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
+        loader.setController(this);
+        final Parent rootParent = loader.load();
 
-                        stage.setScene(rootScene);
+        final Scene rootScene = new Scene(rootParent);
+        rootScene.getStylesheets().add("/styles/Styles.css");
+
+        stage.setScene(rootScene);
     }
 
 
