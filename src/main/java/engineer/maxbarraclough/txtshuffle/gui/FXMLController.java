@@ -108,15 +108,17 @@ public final class FXMLController implements Initializable {
             Model.INSTANCE.setMessageBytes(msgBytes);
 
             // TODO move this to its own method
-            final Node source = (Node) event.getSource();
-            final Window window = source.getScene().getWindow();
+            final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
+            loader.setController(this);
 
-            final Stage stage = (Stage) window; // ugly cast following https://stackoverflow.com/a/31686775
+            final Parent parent = loader.load();
 
-            final Parent parent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
             final Scene scene = new Scene(parent);
             scene.getStylesheets().add("/styles/Styles.css");
 
+            final Node source = (Node)event.getSource();
+            final Window window = source.getScene().getWindow();
+            final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
             stage.setTitle("Select Data-Set Source");
             stage.setScene(scene);
         } catch (IllegalArgumentException iae) {
@@ -387,24 +389,22 @@ public final class FXMLController implements Initializable {
     @FXML
     private void handleEncodeButtonAction(ActionEvent event) throws IOException {
 
-                final Parent sdssParent = FXMLLoader.load(this.getClass().getResource("/fxml/SelectMessageSource.fxml"));
-                final Scene sdsScene = new Scene(sdssParent);
-                sdsScene.getStylesheets().add("/styles/Styles.css");
+        final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/fxml/SelectMessageSource.fxml"));
+        loader.setController(this);
 
-                final Stage stage = new Stage();
+        final Parent parent = loader.load();
+        final Scene scene = new Scene(parent);
+        scene.getStylesheets().add("/styles/Styles.css");
+        final Stage stage = new Stage();
 
-                // this call must be made before show()
-                stage.initModality(Modality.APPLICATION_MODAL); // https://docs.oracle.com/javase/8/javafx/api/javafx/stage/Stage.html
+        // this call must be made before show()
+        stage.initModality(Modality.APPLICATION_MODAL); // https://docs.oracle.com/javase/8/javafx/api/javafx/stage/Stage.html
 
-                stage.setTitle("Select Message Source");
-                stage.setResizable(false);
-                stage.setScene(sdsScene);
-                stage.show();
+        stage.setTitle("Select Message Source");
+        stage.setResizable(false);
+        stage.setScene(scene);
+        stage.show();
     }
-
-
-
-
 
 
 
