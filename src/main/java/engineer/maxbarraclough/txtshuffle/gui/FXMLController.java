@@ -715,7 +715,8 @@ public final class FXMLController implements Initializable {
     }
 
 
-
+// // TODO deprecated
+// // https://docs.oracle.com/javafx/2/fxml_get_started/whats_new2.htm
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
