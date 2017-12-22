@@ -90,6 +90,11 @@ public final class FXMLController implements Initializable {
         final String[] split = text.split("\\r?\\n"); // https://stackoverflow.com/a/454913
 
         Model.INSTANCE.setDataSet(split);
+
+        final Node source = (Node) event.getSource();
+        final Window window = source.getScene().getWindow();
+
+        this.goToSelectOutputSink(window, FinalAction.ENCODE);
     }
 
 
