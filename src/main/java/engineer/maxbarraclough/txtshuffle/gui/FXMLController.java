@@ -103,7 +103,7 @@ public final class FXMLController implements Initializable {
         final String msgStr = this.emTextArea.getText();
 
         try {
-            final byte[] msgBytes = TextMessageSupplier.strToByteArr(msgStr);
+            final byte[] msgBytes = msgStr.getBytes();
 
             Model.INSTANCE.setMessageBytes(msgBytes);
 
