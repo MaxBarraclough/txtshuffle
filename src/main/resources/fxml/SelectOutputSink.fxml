@@ -6,8 +6,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="293.0" prefWidth="353.0"
-            xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" >
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="293.0" prefWidth="353.0" xmlns:fx="http://javafx.com/fxml/1">
             <!-- fx:controller="engineer.maxbarraclough.txtshuffle.gui.FXMLController"> -->
    <children>
 
@@ -19,6 +18,7 @@
          </font>
       </Label>
       <Button layoutX="14.0" layoutY="68.0" mnemonicParsing="false" onAction="#handleSelectOutputFileButtonAction" text="Select file" />
-      <Text fx:id="soPathText" layoutX="17.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="177.13671875" />
+<!--  <Text fx:id="soPathText" layoutX="17.0" layoutY="116.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="177.13671875" /> -->
+      <Label fx:id="soPathLabel" layoutX="14.0" layoutY="103.0" />
    </children>
 </AnchorPane>

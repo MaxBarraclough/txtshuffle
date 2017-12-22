@@ -27,6 +27,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.RadioButton;
@@ -67,7 +68,8 @@ public final class FXMLController implements Initializable {
     @FXML private TextArea emTextArea;
     @FXML private TextArea edcdsTextArea;
 
-    @FXML private Text soPathText;
+    // @FXML private Text soPathText;
+    @FXML private Label soPathLabel;
 
 
     private static byte[] binFileToByteArr(final File file) {
@@ -181,7 +183,7 @@ public final class FXMLController implements Initializable {
 
                 // FXML binding can only be used for entities within the scene
                 // https://stackoverflow.com/a/33933973
-                final Node source = (Node) event.getSource();
+                final Node source = (Node)(event.getSource());
                 final Window window = source.getScene().getWindow();
 
                 final File file = fc.showOpenDialog(window); // can return null
@@ -467,10 +469,14 @@ public final class FXMLController implements Initializable {
                     final boolean goAhead = true;
                     if (goAhead) {
                         Model.INSTANCE.setFile(file);
+                        try {
+                            final String str = file.getCanonicalPath(); // can, in theory, throw
+                            this.soPathLabel.setText(str);
+                        } catch (Exception exc) {
+                            // Do nothing
+                        }
                     }
-                }
-                else
-                {
+                } else {
                     Model.INSTANCE.setFile(file);
                 }
             } else { // then existingDir == true
