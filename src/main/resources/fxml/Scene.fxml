@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/9.0.1"
+<VBox prefHeight="400.0" prefWidth="640.0"
       xmlns:fx="http://javafx.com/fxml/1" >
      <!-- fx:controller="engineer.maxbarraclough.txtshuffle.gui.FXMLController" > -->
 
@@ -88,9 +88,9 @@ New (looks like Java 9 but works ok):
         </rowConstraints>
          <children>
             <Button fx:id="encodeButton" mnemonicParsing="false" onAction="#handleEncodeButtonAction" text="Encode" />
-            <Label fx:id="encodeLabel" text="Encode a message into a dataset" GridPane.columnIndex="1" />
+            <Label fx:id="encodeLabel" text="Encode a message into a shopping list" GridPane.columnIndex="1" />
             <Button fx:id="decodeButton" mnemonicParsing="false" onAction="#handleDecodeButtonAction" text="Decode" GridPane.rowIndex="1" />
-            <Label fx:id="decodeLabel" text="Decode a message from a dataset" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="decodeLabel" text="Decode a message from a shopping list" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          </children>
       </GridPane>
     </children>

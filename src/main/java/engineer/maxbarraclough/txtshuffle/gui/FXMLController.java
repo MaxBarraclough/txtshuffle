@@ -126,7 +126,7 @@ public final class FXMLController implements Initializable {
             final Node source = (Node)event.getSource();
             final Window window = source.getScene().getWindow();
             final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
-            stage.setTitle("Select Data-Set Source");
+            stage.setTitle("Select Shopping List Source");
             stage.setScene(scene);
         } catch (IllegalArgumentException iae) {
             final Alert alert = new Alert(
@@ -205,7 +205,7 @@ public final class FXMLController implements Initializable {
                     // For now, just show success popup
                     final Alert alert = new Alert(
                             Alert.AlertType.NONE,
-                            "Successfully read message file",
+                            "Successfully read the message file",
                             ButtonType.OK
                     );
 
@@ -249,7 +249,7 @@ public final class FXMLController implements Initializable {
      */
     private void goToSelectDataSource(final Window window) throws IOException {
         final Stage stage = (Stage) window; // ugly cast following https://stackoverflow.com/a/31686775
-        stage.setTitle("Select Data-Set Source");
+        stage.setTitle("Select Shopping List Source");
 
         final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/fxml/SelectDataSource.fxml"));
         loader.setController(this);
@@ -302,7 +302,7 @@ public final class FXMLController implements Initializable {
                     final Window window = source.getScene().getWindow();
 
                     final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
-                    stage.setTitle("Enter Data-Set Text");
+                    stage.setTitle("Enter Shopping List Text");
 
                     final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/fxml/EnterDataSetText.fxml"));
                     loader.setController(this);
@@ -315,7 +315,7 @@ public final class FXMLController implements Initializable {
 
             } else { // from file
                 final FileChooser fc = new FileChooser();
-                fc.setTitle("Select data-set file");
+                fc.setTitle("Select shopping list file");
 
                 // FXML binding can only be used for entities within the scene
                 // https://stackoverflow.com/a/33933973
@@ -347,7 +347,7 @@ public final class FXMLController implements Initializable {
 
                         final Alert alert = new Alert(
                                 Alert.AlertType.NONE,
-                                "Successfully read data-set file",
+                                "Successfully read the shopping list file",
                                 ButtonType.OK
                         );
 
@@ -516,7 +516,7 @@ public final class FXMLController implements Initializable {
                 if (this.finalAction.equals(FinalAction.ENCODE)) // throws if finalAction is null. We want that.
                 {
                     if ((null == msgBytes) || (null == ds)) {
-                        System.err.println("Failed to initialize a data-source");
+                        System.err.println("Failed to initialize a shopping list source");
                     } else {
                         final String[] outputStrs = engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.encodeBytesIntoData(
                                 Model.INSTANCE.getDataSet(),
@@ -647,7 +647,7 @@ public final class FXMLController implements Initializable {
                     final Window window = source.getScene().getWindow();
 
                     final Stage stage = (Stage)window; // ugly cast following https://stackoverflow.com/a/31686775
-                    stage.setTitle("Enter Encoded Data Text");
+                    stage.setTitle("Enter Scrambled Shopping List");
 
                     final FXMLLoader loader = new FXMLLoader(this.getClass().getResource("/fxml/EnterEncodedDataSetText.fxml"));
                     loader.setController(this);
@@ -659,7 +659,7 @@ public final class FXMLController implements Initializable {
 
             } else { // from file
                 final FileChooser fc = new FileChooser();
-                fc.setTitle("Select data-set file");
+                fc.setTitle("Select shopping list file");
 
                 // FXML binding can only be used for entities within the scene
                 // https://stackoverflow.com/a/33933973
@@ -693,7 +693,7 @@ public final class FXMLController implements Initializable {
 
                         final Alert alert = new Alert(
                                 Alert.AlertType.NONE,
-                                "Successfully read encoded file",
+                                "Successfully read the scrambled file",
                                 ButtonType.OK
                         );
 

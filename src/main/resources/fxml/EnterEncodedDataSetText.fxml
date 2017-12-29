@@ -10,8 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="507.0" prefWidth="754.0"
-            xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" >
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="507.0" prefWidth="754.0" xmlns:fx="http://javafx.com/fxml/1">
             <!-- fx:controller="engineer.maxbarraclough.txtshuffle.gui.FXMLController"> -->
 
    <children>
@@ -28,14 +27,14 @@
          <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label prefHeight="37.0" prefWidth="325.0" text="Enter Encoded Data-Set Text">
+                  <Label prefHeight="37.0" prefWidth="342.0" text="Enter Scrambled Shopping List">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </Label>
                </children>
             </VBox>
-            <TextArea fx:id="edcdsTextArea" prefHeight="285.0" prefWidth="726.0" promptText="Enter your data-set here" GridPane.rowIndex="1" />
+            <TextArea fx:id="edcdsTextArea" prefHeight="285.0" prefWidth="726.0" promptText="Enter shopping list here" GridPane.rowIndex="1" />
             <AnchorPane prefHeight="71.0" prefWidth="726.0" GridPane.rowIndex="2">
                <children>
                   <Button fx:id="edcdsOkButton" layoutX="660.0" layoutY="14.0" mnemonicParsing="false" onAction="#handleEntEncDsButtonAction" text="Ok" />
