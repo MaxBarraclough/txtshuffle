@@ -61,8 +61,6 @@ public final class Model {
 
 
     /**
-     * Does not close the stream
-     *
      * TODO make this no-allocate
      *
      * @param messageBytes This array is treated as read-only
