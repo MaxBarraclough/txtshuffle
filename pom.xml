@@ -4,7 +4,7 @@
 
     <groupId>engineer.maxbarraclough</groupId>
     <artifactId>txtshuffle</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.2</version>
     <packaging>jar</packaging>
 
     <name>txtshuffle</name>
@@ -118,4 +118,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <description>Steganography toy encoding data in text line order (by shuffling). Similar to gifshuffle, but general.</description>
 </project>
