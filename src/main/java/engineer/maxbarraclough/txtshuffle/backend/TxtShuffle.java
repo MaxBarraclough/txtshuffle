@@ -336,7 +336,8 @@ if (false) {
 
 
 	/**
-	 * Returns a new array which is the desired reordering of the input array
+	 * This method is 'pure' - no side-effects, no hidden data dependencies.
+	 * Returns a new array which is the desired reordering of the input array.
 	 * @param input
 	 * @return
 	 */
