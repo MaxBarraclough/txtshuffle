@@ -72,26 +72,25 @@ public final class Model {
     {
                 // TODO move this logic to the backend package
 
-                final BigInteger bi = new BigInteger(messageBytes);
+                final BigInteger bi = new BigInteger(this.messageBytes);
 
                 // // TODO handle NumberTooGreatExceptionproperly, somewhere
 		final int[] compact =
 				VectorConversions.intToCompactVector(
-				  dataSet.length,
+				  this.dataSet.length,
 				  bi
 				);
 
                 // TODO can we make a no-allocate version of this method?
 		final int[] isvFromCompact = VectorConversions.compactToIsv(compact);
 
-		java.util.Arrays.sort(dataSet); // dataSet is now sorted
+		java.util.Arrays.sort(this.dataSet); // dataSet is now sorted
 
                 // TODO mutative version of this method, avoiding new array
-		final String[] ret = TxtShuffle.applyIsvToStringArr(dataSet, isvFromCompact);
+		final String[] ret = TxtShuffle.applyIsvToStringArr(this.dataSet, isvFromCompact);
                 // dataSet is now ordered to encode our number
 
                 return ret;
-
     }
 
 
@@ -106,7 +105,7 @@ public final class Model {
         // TODO check the file doesn't already exist
         try (FileWriter fw = new FileWriter(outputFile)) {
 
-            if (dataSet.length > 0) {
+            if (this.dataSet.length > 0) {
                 fw.write(dataSet[0]);
 
                 // https://stackoverflow.com/a/209771
@@ -115,9 +114,9 @@ public final class Model {
                 // https://stackoverflow.com/a/10937340
                 final String lineSep = System.lineSeparator();
 
-                for (int i = 1; i != dataSet.length; ++i) {
+                for (int i = 1; i != this.dataSet.length; ++i) {
                     fw.write(lineSep);
-                    final String s = dataSet[i];
+                    final String s = this.dataSet[i];
                     fw.write(s);
                 }
             }
