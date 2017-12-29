@@ -60,67 +60,71 @@ public final class Model {
     }
 
 
-    /**
-     * TODO make this no-allocate
-     *
-     * @param messageBytes This array is treated as read-only
-     * @param dataSet      NOTE This array will be reordered
-     *
-     * @throws engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.NumberTooGreatException
-     */
-    private String[] doEncode() throws TxtShuffle.NumberTooGreatException
-    {
-                // TODO move this logic to the backend package
-
-                final BigInteger bi = new BigInteger(this.messageBytes);
-
-                // // TODO handle NumberTooGreatExceptionproperly, somewhere
-		final int[] compact =
-				VectorConversions.intToCompactVector(
-				  this.dataSet.length,
-				  bi
-				);
-
-                // TODO can we make a no-allocate version of this method?
-		final int[] isvFromCompact = VectorConversions.compactToIsv(compact);
-
-		java.util.Arrays.sort(this.dataSet); // dataSet is now sorted
-
-                // TODO mutative version of this method, avoiding new array
-		final String[] ret = TxtShuffle.applyIsvToStringArr(this.dataSet, isvFromCompact);
-                // dataSet is now ordered to encode our number
-
-                return ret;
-    }
-
-
-    // TODO make non-static and use the existing members
-    public void encodeIntoFile(final byte[] messageBytes, final String[] dataSet, final File outputFile)
-            throws TxtShuffle.NumberTooGreatException, IOException // TODO proper exception handling
-    {
-        this.doEncode();
-
-        // this.dataSet is now scrambled to encode this.messageBytes
-
-        // TODO check the file doesn't already exist
-        try (FileWriter fw = new FileWriter(outputFile)) {
-
-            if (this.dataSet.length > 0) {
-                fw.write(dataSet[0]);
-
-                // https://stackoverflow.com/a/209771
-                //final String lineSep = System.getProperty("line.separator");
-
-                // https://stackoverflow.com/a/10937340
-                final String lineSep = System.lineSeparator();
-
-                for (int i = 1; i != this.dataSet.length; ++i) {
-                    fw.write(lineSep);
-                    final String s = this.dataSet[i];
-                    fw.write(s);
-                }
-            }
-        } // no catch or finally, we just want the with-resource feature
-    }
+//    /**
+//     * TODO make this no-allocate
+//     *
+//     * Side-effect: shuffles this.dataSet to encode the message
+//     * (according to this.messageBytes)
+//     *
+//     * @throws engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.NumberTooGreatException
+//     */
+//    private String[] doEncode() throws TxtShuffle.NumberTooGreatException
+//    {
+//                // TODO move this logic to the backend package
+//
+//                final BigInteger bi = new BigInteger(this.messageBytes);
+//
+//              // TODO handle NumberTooGreatExceptionproperly
+//		final int[] compact =
+//				VectorConversions.intToCompactVector(
+//				  this.dataSet.length,
+//				  bi
+//				);
+//
+//              // TODO can we make a no-allocate version of this method?
+//		final int[] isvFromCompact = VectorConversions.compactToIsv(compact);
+//
+//		java.util.Arrays.sort(this.dataSet); // dataSet is now sorted
+//
+//                // TODO mutative version of this method, avoiding new array
+//		final String[] ret = TxtShuffle.applyIsvToStringArr(this.dataSet, isvFromCompact); // that method is 'pure'
+//                // dataSet is now ordered to encode our number
+//
+//                return ret;
+//    }
+//
+//
+//    // TODO make non-static and use the existing members
+//    public void encodeIntoFile(final byte[] messageBytes, final String[] dataSet, final File outputFile)
+//            throws TxtShuffle.NumberTooGreatException, IOException // TODO proper exception handling
+//    {
+//
+// n.b. THIS METHOD IS UNTESTED AND MAY WELL BE BROKEN!
+//        // do we really want to ignore the returned value????
+//
+//        this.doEncode(); // already done
+//
+//        // this.dataSet is now scrambled to encode this.messageBytes
+//
+//        // TODO check the file doesn't already exist
+//        try (FileWriter fw = new FileWriter(outputFile)) {
+//
+//            if (this.dataSet.length > 0) {
+//                fw.write(dataSet[0]);
+//
+//                // https://stackoverflow.com/a/209771
+//                //final String lineSep = System.getProperty("line.separator");
+//
+//                // https://stackoverflow.com/a/10937340
+//                final String lineSep = System.lineSeparator();
+//
+//                for (int i = 1; i != this.dataSet.length; ++i) {
+//                    fw.write(lineSep);
+//                    final String s = this.dataSet[i];
+//                    fw.write(s);
+//                }
+//            }
+//        } // no catch or finally, we just want the with-resource feature
+//    }
 
 }
