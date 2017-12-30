@@ -518,9 +518,24 @@ public final class FXMLController implements Initializable {
                     if ((null == msgBytes) || (null == ds)) {
                         System.err.println("Failed to initialize a shopping list source");
                     } else {
+                        final byte[] uncompressedBytes = Model.INSTANCE.getMessageBytes();
+                        // final java.io.InputStream is = new java.io.ByteArrayInputStream(uncompressedBytes);
+                        // nope, that's for decompressing! final java.util.zip.GZIPInputStream gis = new java.util.zip.GZIPInputStream(is, uncompressedBytes.length);
+
+                        // this object will end up holding the compressed bytes
+                        final java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
+                        {
+                            final java.util.zip.GZIPOutputStream gos = new java.util.zip.GZIPOutputStream(baos);
+                            gos.write(uncompressedBytes);
+                            gos.close(); // probably important - https://stackoverflow.com/a/14783672
+                        }
+                        baos.close();
+
+                        final byte[] compressedBytes = baos.toByteArray();
+
                         final String[] outputStrs = engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.encodeBytesIntoData(
                                 Model.INSTANCE.getDataSet(),
-                                Model.INSTANCE.getMessageBytes()
+                                compressedBytes
                         ); // can throw NumberTooGreatException only
 
                         final File outFile = Model.INSTANCE.getFile();
