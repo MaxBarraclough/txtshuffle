@@ -534,12 +534,12 @@ public final class FXMLController implements Initializable {
 
                             // this object will end up holding the compressed bytes
                             final java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
-                            {
-                                final java.util.zip.GZIPOutputStream gos = new java.util.zip.GZIPOutputStream(baos);
+
+                            // Unlike ByteArrayOutputStream, it's important to close GZIPOutputStream https://git.io/vbNbq
+                            try (java.util.zip.GZIPOutputStream gos = new java.util.zip.GZIPOutputStream(baos)) {
                                 gos.write(uncompressedBytes);
-                                gos.close(); // probably important - https://stackoverflow.com/a/14783672
                             }
-                            baos.close();
+                            // baos.close(); // NOP
 
                             final byte[] compressedBytes = baos.toByteArray();
 
