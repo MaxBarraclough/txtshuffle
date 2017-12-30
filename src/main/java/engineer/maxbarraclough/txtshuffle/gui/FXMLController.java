@@ -338,7 +338,7 @@ public final class FXMLController implements Initializable {
 
                         {
                             // TODO eliminate this awful redundant copy. setDataSet should accept List<String>
-                            final List<String> split = Files.readAllLines(file.toPath());
+                            final List<String> split = Files.readAllLines(file.toPath()); // uses UTF-8 charset // // TODO change?
                             final int count = split.size();
                             final String[] arr = new String[count];
                             split.toArray(arr);
