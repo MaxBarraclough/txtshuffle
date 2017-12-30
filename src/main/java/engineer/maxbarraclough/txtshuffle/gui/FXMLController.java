@@ -453,10 +453,18 @@ public final class FXMLController implements Initializable {
 
         if (null != file) {
             // assert(!file.isDirectory());
-            final boolean existingDir = file.exists() && file.isDirectory();
+            final boolean existingDir = file.exists() && file.isDirectory(); // TODO remove redundant first term
 
-            if (!existingDir) {
-                    /* // No need for this; JavaFX does the prompt for us
+            if (existingDir) { // Rare case where user wrongly selects a directory not a file
+                final Alert alert = new Alert(
+                        Alert.AlertType.NONE,
+                        "Please select a file",
+                        ButtonType.OK
+                );
+
+                alert.showAndWait(); // TODO go async: use 'show' and a listener
+            } else { // !existingDir
+                /* // No need for this; JavaFX does the prompt for us
                     final Alert alert = new Alert(
                             Alert.AlertType.NONE,
                             "Overwrite this file?",
@@ -466,25 +474,17 @@ public final class FXMLController implements Initializable {
 
                     final Optional<ButtonType> bt = alert.showAndWait(); // TODO go async: use 'show' and a listener
                     final boolean goAhead = bt.get().equals(ButtonType.YES);
-                    */
-                    final boolean goAhead = true;
-                    if (goAhead) {
-                        Model.INSTANCE.setFile(file);
-                        try {
-                            final String str = file.getCanonicalPath(); // can, in theory, throw
-                            this.soPathLabel.setText(str);
-                        } catch (final Exception exc) {
-                            // Do nothing
-                        }
+                 */
+                final boolean goAhead = true;
+                if (goAhead) {
+                    Model.INSTANCE.setFile(file);
+                    try {
+                        final String str = file.getCanonicalPath(); // can, in theory, throw
+                        this.soPathLabel.setText(str);
+                    } catch (final Exception exc) {
+                        // Do nothing
                     }
-            } else { // then existingDir == true
-                final Alert alert = new Alert(
-                        Alert.AlertType.NONE,
-                        "Please select a file",
-                        ButtonType.OK
-                );
-
-                alert.showAndWait(); // TODO go async: use 'show' and a listener
+                }
             }
         } // else user canceled - failed to select an output file
 
