@@ -456,9 +456,7 @@ public final class FXMLController implements Initializable {
             final boolean existingDir = file.exists() && file.isDirectory();
 
             if (!existingDir) {
-
-                if (file.exists()) {
-                    /* // No need for this, JavaFX does the prompt for us
+                    /* // No need for this; JavaFX does the prompt for us
                     final Alert alert = new Alert(
                             Alert.AlertType.NONE,
                             "Overwrite this file?",
@@ -475,13 +473,10 @@ public final class FXMLController implements Initializable {
                         try {
                             final String str = file.getCanonicalPath(); // can, in theory, throw
                             this.soPathLabel.setText(str);
-                        } catch (Exception exc) {
+                        } catch (final Exception exc) {
                             // Do nothing
                         }
                     }
-                } else {
-                    Model.INSTANCE.setFile(file);
-                }
             } else { // then existingDir == true
                 final Alert alert = new Alert(
                         Alert.AlertType.NONE,
