@@ -452,8 +452,8 @@ public final class FXMLController implements Initializable {
         final File file = fc.showSaveDialog(window); // can return null
 
         if (null != file) {
-            // assert(!file.isDirectory());
-            final boolean existingDir = file.exists() && file.isDirectory(); // TODO remove redundant first term
+
+            final boolean existingDir = file.isDirectory(); // includes an existence check
 
             if (existingDir) { // Rare case where user wrongly selects a directory not a file
                 final Alert alert = new Alert(
