@@ -493,11 +493,10 @@ public final class FXMLController implements Initializable {
 
 
 
-
         // // // // // // // RENAME method now to handle decode, too
 
     /**
-     * Do final encode work. Do not confuse with handleEncodeButtonAction which
+     * Do final encode/decode work. Do not confuse with handleEncodeButtonAction which
      * begins the wizard for the encode process.
      */
     @FXML
@@ -601,7 +600,12 @@ public final class FXMLController implements Initializable {
 //                }
                 }
             } else { // we're doing a decode
+
                 final String[] encodedDS = Model.INSTANCE.getEncodedDataSet();
+
+                // TODO can we have this method return a byte[] directly,
+                // and optimise it to 'accumulate and discard' whenever it
+                // encounters a natural power of 2?
 
                 final java.math.BigInteger bi
                         = engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.retrieveNumberFromData(encodedDS);
@@ -667,8 +671,11 @@ public final class FXMLController implements Initializable {
 
 
 
-
-
+    /**
+     * Start us on the decode path
+     * @param event
+     * @throws IOException
+     */
     @FXML
     private void handleDecodeButtonAction(final ActionEvent event) throws IOException {
 
