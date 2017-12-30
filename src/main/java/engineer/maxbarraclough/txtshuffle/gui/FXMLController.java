@@ -2,6 +2,7 @@ package engineer.maxbarraclough.txtshuffle.gui;
 
 import engineer.maxbarraclough.txtshuffle.backend.TxtShuffle;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -266,6 +267,7 @@ public final class FXMLController implements Initializable {
 
 
     /**
+     * Part of the 'encode' path, *not* decode.
      * Continue on from selecting which data source (file or 'manual' text entry).
      * Transition to the appropriate scene.
      * Do not confuse with handleEntDsButtonAction
@@ -615,7 +617,30 @@ public final class FXMLController implements Initializable {
                     final java.math.BigInteger bi =
                             engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.retrieveNumberFromData(encodedDS);
 
-                    final byte[] bytes = bi.toByteArray();
+                    final byte[] uncompressedBytes = bi.toByteArray();
+                    byte[] bytes;
+
+                    if (encodedDS.length >= 100)
+                    {
+                        final java.io.ByteArrayInputStream bais = new java.io.ByteArrayInputStream(uncompressedBytes);
+                        final java.util.zip.GZIPInputStream gis = new java.util.zip.GZIPInputStream(bais, uncompressedBytes.length);
+
+                        // InputStream#readAllBytes is Java 9 only - https://stackoverflow.com/a/37681322
+
+                        // based on https://stackoverflow.com/a/17861016
+                        final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                        final byte[] buffer = new byte[512];
+                        for (int len; (len = gis.read(buffer)) != -1;)
+                        {
+                            bos.write(buffer, 0, len);
+                        }
+                        // bos.close(); // NOP
+                        bytes = bos.toByteArray();
+                    }
+                    else
+                    {
+                        bytes = uncompressedBytes;
+                    }
 
                     final File outFile = Model.INSTANCE.getFile();
                     assert (null != outFile);
