@@ -496,145 +496,53 @@ public final class FXMLController implements Initializable {
 
         // // // // // // // RENAME method now to handle decode, too
 
-
     /**
-     * Do final encode work.
-     * Do not confuse with handleEncodeButtonAction which begins
-     * the wizard for the encode process.
+     * Do final encode work. Do not confuse with handleEncodeButtonAction which
+     * begins the wizard for the encode process.
      */
     @FXML
     private void handleGoEncodeButtonAction(final ActionEvent event) {
         final byte[] msgBytes = Model.INSTANCE.getMessageBytes();
         final String[] ds = Model.INSTANCE.getDataSet();
 
-        {
+        try {
 
-            try {
+            if (this.finalAction.equals(FinalAction.ENCODE)) // throws if finalAction is null. We want that.
+            {
+                if ((null == msgBytes) || (null == ds)) {
+                    System.err.println("Failed to initialize a shopping list source");
+                } else {
+                    final String[] dataSet = Model.INSTANCE.getDataSet();
 
-                if (this.finalAction.equals(FinalAction.ENCODE)) // throws if finalAction is null. We want that.
-                {
-                    if ((null == msgBytes) || (null == ds)) {
-                        System.err.println("Failed to initialize a shopping list source");
+                    final boolean compress = (dataSet.length >= 100);
+
+                    final byte[] uncompressedBytes = Model.INSTANCE.getMessageBytes();
+                    String[] outputStrs;
+
+                    if (compress) {
+                        // final java.io.InputStream is = new java.io.ByteArrayInputStream(uncompressedBytes);
+                        // nope, that's for decompressing! final java.util.zip.GZIPInputStream gis = new java.util.zip.GZIPInputStream(is, uncompressedBytes.length);
+
+                        // this object will end up holding the compressed bytes
+                        final java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
+
+                        // Unlike ByteArrayOutputStream, it's important to close GZIPOutputStream https://git.io/vbNbq
+                        try (java.util.zip.GZIPOutputStream gos = new java.util.zip.GZIPOutputStream(baos)) {
+                            gos.write(uncompressedBytes);
+                        }
+                        // baos.close(); // NOP
+
+                        final byte[] compressedBytes = baos.toByteArray();
+
+                        outputStrs = engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.encodeBytesIntoData(
+                                dataSet,
+                                compressedBytes
+                        ); // can throw NumberTooGreatException only
                     } else {
-                        final String[] dataSet = Model.INSTANCE.getDataSet();
-
-                        final boolean compress = (dataSet.length >= 100);
-
-                        final byte[] uncompressedBytes = Model.INSTANCE.getMessageBytes();
-                        String[] outputStrs;
-
-                        if (compress) {
-                            // final java.io.InputStream is = new java.io.ByteArrayInputStream(uncompressedBytes);
-                            // nope, that's for decompressing! final java.util.zip.GZIPInputStream gis = new java.util.zip.GZIPInputStream(is, uncompressedBytes.length);
-
-                            // this object will end up holding the compressed bytes
-                            final java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
-
-                            // Unlike ByteArrayOutputStream, it's important to close GZIPOutputStream https://git.io/vbNbq
-                            try (java.util.zip.GZIPOutputStream gos = new java.util.zip.GZIPOutputStream(baos)) {
-                                gos.write(uncompressedBytes);
-                            }
-                            // baos.close(); // NOP
-
-                            final byte[] compressedBytes = baos.toByteArray();
-
-                            outputStrs = engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.encodeBytesIntoData(
-                                    dataSet,
-                                    compressedBytes
-                            ); // can throw NumberTooGreatException only
-                        } else {
-                            outputStrs = engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.encodeBytesIntoData(
-                                    dataSet,
-                                    uncompressedBytes
-                            ); // can throw NumberTooGreatException only
-                        }
-
-                        final File outFile = Model.INSTANCE.getFile();
-                        assert (null != outFile);
-
-//              We already got the go-ahead to overwrite, if applicable
-//              asList doesn't do a copy, it's just indirection. Java arrays aren't Iterable
-                        // java.nio.file.Files.write(outFile.toPath(), Arrays.asList(outputStrs));//, Charset.defaultCharset());
-                        if (outputStrs.length >= 1) {
-
-                            boolean justDidAWrite = false;
-
-                            if (outputStrs.length >= 2) {
-                                final Stream<String> stream = Arrays.stream(outputStrs).limit(outputStrs.length - 1);
-
-                                final Iterable<String> it = (Iterable<String>) stream::iterator;
-                                // https://stackoverflow.com/q/20129762 , http://www.lambdafaq.org/how-do-i-turn-a-stream-into-an-iterable/
-
-                                // use UTF-8, *not* the default charset. TODO CHANGE? // //
-                                // If file already exists, silently overwrite
-                                java.nio.file.Files.write(outFile.toPath(), it);//, Charset.defaultCharset());
-
-                                justDidAWrite = true;
-                            }
-
-                            // Last line is special: we don't want to put a newline at the end.
-                            // The overload of Files.write above, non-negotiably does so.
-                            // Rather ugly that we have to open/close the file twice,
-                            // particularly as we must now handle the single-line case specially.
-                            final java.nio.file.StandardOpenOption[] options
-                                    = justDidAWrite ?
-                                    new java.nio.file.StandardOpenOption[]{java.nio.file.StandardOpenOption.CREATE,
-                                        java.nio.file.StandardOpenOption.WRITE,
-                                        java.nio.file.StandardOpenOption.APPEND}
-                                    : new java.nio.file.StandardOpenOption[]{java.nio.file.StandardOpenOption.CREATE,
-                                        java.nio.file.StandardOpenOption.WRITE,
-                                        java.nio.file.StandardOpenOption.TRUNCATE_EXISTING};
-
-                            // use UTF-8, *not* the default charset. TODO CHANGE? // //
-                            java.nio.file.Files.write(
-                                    outFile.toPath(),
-                                    outputStrs[outputStrs.length - 1].getBytes(Charset.forName("UTF-8")),
-                                    options
-                            );
-                        }
-
-
-                        // these three are the default:
-//                            java.nio.file.StandardOpenOption.CREATE_NEW,
-//                            java.nio.file.StandardOpenOption.WRITE,
-//                            java.nio.file.StandardOpenOption.TRUNCATE_EXISTING
-
-                        // can throw IOException only
-//                try (final FileWriter fw = new FileWriter(outFile)) {
-//                    for (String str : outputStrs) {
-//                        fw.write(str);
-//                    }
-//                }
-                    }
-                } else { // we're doing a decode
-                    final String[] encodedDS = Model.INSTANCE.getEncodedDataSet();
-
-                    final java.math.BigInteger bi =
-                            engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.retrieveNumberFromData(encodedDS);
-
-                    final byte[] uncompressedBytes = bi.toByteArray();
-                    byte[] bytes;
-
-                    if (encodedDS.length >= 100)
-                    {
-                        final java.io.ByteArrayInputStream bais = new java.io.ByteArrayInputStream(uncompressedBytes);
-                        final java.util.zip.GZIPInputStream gis = new java.util.zip.GZIPInputStream(bais, uncompressedBytes.length);
-
-                        // InputStream#readAllBytes is Java 9 only - https://stackoverflow.com/a/37681322
-
-                        // based on https://stackoverflow.com/a/17861016
-                        final ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                        final byte[] buffer = new byte[512];
-                        for (int len; (len = gis.read(buffer)) != -1;)
-                        {
-                            bos.write(buffer, 0, len);
-                        }
-                        // bos.close(); // NOP
-                        bytes = bos.toByteArray();
-                    }
-                    else
-                    {
-                        bytes = uncompressedBytes;
+                        outputStrs = engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.encodeBytesIntoData(
+                                dataSet,
+                                uncompressedBytes
+                        ); // can throw NumberTooGreatException only
                     }
 
                     final File outFile = Model.INSTANCE.getFile();
@@ -642,39 +550,118 @@ public final class FXMLController implements Initializable {
 
 //              We already got the go-ahead to overwrite, if applicable
 //              asList doesn't do a copy, it's just indirection. Java arrays aren't Iterable
-                    java.nio.file.Files.write(outFile.toPath(), bytes);
+                    // java.nio.file.Files.write(outFile.toPath(), Arrays.asList(outputStrs));//, Charset.defaultCharset());
+                    if (outputStrs.length >= 1) {
+
+                        boolean justDidAWrite = false;
+
+                        if (outputStrs.length >= 2) {
+                            final Stream<String> stream = Arrays.stream(outputStrs).limit(outputStrs.length - 1);
+
+                            final Iterable<String> it = (Iterable<String>) stream::iterator;
+                            // https://stackoverflow.com/q/20129762 , http://www.lambdafaq.org/how-do-i-turn-a-stream-into-an-iterable/
+
+                            // use UTF-8, *not* the default charset. TODO CHANGE? // //
+                            // If file already exists, silently overwrite
+                            java.nio.file.Files.write(outFile.toPath(), it);//, Charset.defaultCharset());
+
+                            justDidAWrite = true;
+                        }
+
+                        // Last line is special: we don't want to put a newline at the end.
+                        // The overload of Files.write above, non-negotiably does so.
+                        // Rather ugly that we have to open/close the file twice,
+                        // particularly as we must now handle the single-line case specially.
+                        final java.nio.file.StandardOpenOption[] options
+                                = justDidAWrite
+                                        ? new java.nio.file.StandardOpenOption[]{java.nio.file.StandardOpenOption.CREATE,
+                                    java.nio.file.StandardOpenOption.WRITE,
+                                    java.nio.file.StandardOpenOption.APPEND}
+                                : new java.nio.file.StandardOpenOption[]{java.nio.file.StandardOpenOption.CREATE,
+                                    java.nio.file.StandardOpenOption.WRITE,
+                                    java.nio.file.StandardOpenOption.TRUNCATE_EXISTING};
+
+                        // use UTF-8, *not* the default charset. TODO CHANGE? // //
+                        java.nio.file.Files.write(
+                                outFile.toPath(),
+                                outputStrs[outputStrs.length - 1].getBytes(Charset.forName("UTF-8")),
+                                options
+                        );
+                    }
+
+                    // these three are the default:
+//                            java.nio.file.StandardOpenOption.CREATE_NEW,
+//                            java.nio.file.StandardOpenOption.WRITE,
+//                            java.nio.file.StandardOpenOption.TRUNCATE_EXISTING
+                    // can throw IOException only
+//                try (final FileWriter fw = new FileWriter(outFile)) {
+//                    for (String str : outputStrs) {
+//                        fw.write(str);
+//                    }
+//                }
+                }
+            } else { // we're doing a decode
+                final String[] encodedDS = Model.INSTANCE.getEncodedDataSet();
+
+                final java.math.BigInteger bi
+                        = engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.retrieveNumberFromData(encodedDS);
+
+                final byte[] uncompressedBytes = bi.toByteArray();
+                byte[] bytes;
+
+                if (encodedDS.length >= 100) {
+                    final java.io.ByteArrayInputStream bais = new java.io.ByteArrayInputStream(uncompressedBytes);
+                    final java.util.zip.GZIPInputStream gis = new java.util.zip.GZIPInputStream(bais, uncompressedBytes.length);
+
+                    // InputStream#readAllBytes is Java 9 only - https://stackoverflow.com/a/37681322
+                    // based on https://stackoverflow.com/a/17861016
+                    final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    final byte[] buffer = new byte[512];
+                    for (int len; (len = gis.read(buffer)) != -1;) {
+                        bos.write(buffer, 0, len);
+                    }
+                    // bos.close(); // NOP
+                    bytes = bos.toByteArray();
+                } else {
+                    bytes = uncompressedBytes;
                 }
 
-                final Alert alert = new Alert(
-                        Alert.AlertType.NONE,
-                        "Saved",
-                        ButtonType.OK
-                );
-                alert.showAndWait(); // TODO go async: use 'show' and a listener
+                final File outFile = Model.INSTANCE.getFile();
+                assert (null != outFile);
 
-                final Node source = (Node) event.getSource();
-                final Window window = source.getScene().getWindow();
-                final Stage stage = (Stage) window;
-                stage.close();
-
-
-            } catch (IOException ex) {
-                Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
-                final Alert alert = new Alert(
-                        Alert.AlertType.NONE,
-                        "Error writing to file",
-                        ButtonType.OK
-                );
-                alert.showAndWait(); // TODO go async: use 'show' and a listener
-            } catch (TxtShuffle.NumberTooGreatException ex) {
-                Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
-                final Alert alert = new Alert(
-                        Alert.AlertType.NONE,
-                        "Input too big to encode",
-                        ButtonType.OK
-                );
-                alert.showAndWait(); // TODO go async: use 'show' and a listener
+//              We already got the go-ahead to overwrite, if applicable
+//              asList doesn't do a copy, it's just indirection. Java arrays aren't Iterable
+                java.nio.file.Files.write(outFile.toPath(), bytes);
             }
+
+            final Alert alert = new Alert(
+                    Alert.AlertType.NONE,
+                    "Saved",
+                    ButtonType.OK
+            );
+            alert.showAndWait(); // TODO go async: use 'show' and a listener
+
+            final Node source = (Node) event.getSource();
+            final Window window = source.getScene().getWindow();
+            final Stage stage = (Stage) window;
+            stage.close();
+
+        } catch (IOException ex) {
+            Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+            final Alert alert = new Alert(
+                    Alert.AlertType.NONE,
+                    "Error writing to file",
+                    ButtonType.OK
+            );
+            alert.showAndWait(); // TODO go async: use 'show' and a listener
+        } catch (TxtShuffle.NumberTooGreatException ex) {
+            Logger.getLogger(FXMLController.class.getName()).log(Level.SEVERE, null, ex);
+            final Alert alert = new Alert(
+                    Alert.AlertType.NONE,
+                    "Input too big to encode",
+                    ButtonType.OK
+            );
+            alert.showAndWait(); // TODO go async: use 'show' and a listener
         }
     }
 
