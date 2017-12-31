@@ -236,6 +236,7 @@ public final class VectorConversions {
 		BigInteger card = BigInteger.valueOf(compactVector.length);
 		// int card = compactVector.length;
 		// cardinality of the set of 'options' is initially the length of the vector
+                // Remember each interval starts at zero.
 
 		for (int i = 0; i != stopBefore; ++i)
 		{
@@ -244,7 +245,7 @@ public final class VectorConversions {
 			acc = acc.multiply(card);
 
 			// acc += compactVector[i];
-			BigInteger toAdd = BigInteger.valueOf(compactVector[i]);
+			final BigInteger toAdd = BigInteger.valueOf(compactVector[i]);
 			acc = acc.add( toAdd );
 
 			// --card;
