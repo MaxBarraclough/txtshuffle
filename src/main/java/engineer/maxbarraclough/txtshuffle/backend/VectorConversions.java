@@ -284,42 +284,6 @@ public final class VectorConversions {
          */
         private static BigInteger[] genMultipliersList(final int count) // count won't exceed int
         {
-            final BigInteger[] ret1 = genMultipliersList_Orig(count);
-            final BigInteger[] ret2 = genMultipliersList_Fast(count);
-            final boolean match = Arrays.equals(ret1, ret2);
-            assert(match);
-            return ret1;
-        }
-
-        private static BigInteger[] genMultipliersList_Orig(final int count) // count won't exceed int
-        {
-            final ArrayList<BigInteger> list = new ArrayList<BigInteger>(count);
-
-            if (count > 0)
-            {
-                BigInteger val = BigInteger.ONE; // the val to push
-                list.add(val);
-                if (count > 1)
-                {
-                    list.add(val); // yes, we push BigInteger.ONE twice
-                    for (int i = 2; i < count; ++i) // iterate zero times if count is exactly 2
-                    {
-                        // starts at 2. Won't exceed the bounds of int, but need a BigInteger to do the mult
-                        final BigInteger c = BigInteger.valueOf(i);
-                        val = val.multiply(c);
-                        list.add(val);
-                    }
-                }
-            }
-
-            Collections.reverse(list);
-
-            final BigInteger[] ret = list.toArray(new BigInteger[count]);
-            return ret;
-        }
-
-        private static BigInteger[] genMultipliersList_Fast(final int count) // count won't exceed int
-        {
             final BigInteger[] arr = new BigInteger[count];
 
             if (count > 0)
