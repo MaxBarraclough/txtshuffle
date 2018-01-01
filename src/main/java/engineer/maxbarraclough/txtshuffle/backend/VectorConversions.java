@@ -277,34 +277,49 @@ public final class VectorConversions {
 		return acc;
 	}
 
+        private static final class BigIntAndTwoPowerFlag
+        {
+            public final BigInteger bi;
+            public final boolean isTwoPower;
+
+            public BigIntAndTwoPowerFlag(final BigInteger b, final boolean f)
+            {
+                this.bi = b;
+                this.isTwoPower = f;
+            }
+        }
 
         /**
          * @param count
          * @return
          */
-        private static BigInteger[] genMultipliersList(final int count) // count won't exceed int
+        private static BigIntAndTwoPowerFlag[] genMultipliersList(final int count) // count won't exceed int
         {
-            final BigInteger[] arr = new BigInteger[count];
+            final BigIntAndTwoPowerFlag[] arr = new BigIntAndTwoPowerFlag[count];
 
             if (count > 0)
             {
                 BigInteger val = BigInteger.ONE; // the val to push
 
                 final int countMinusOne = count - 1;
-                arr[countMinusOne] = val;
+                arr[countMinusOne] = new BigIntAndTwoPowerFlag(val, false);
 
                 if (count > 1)
                 {
-                    arr[countMinusOne - 1] = val; // yes, we push BigInteger.ONE twice
+                    arr[countMinusOne - 1] = new BigIntAndTwoPowerFlag(val, true); // yes, we push BigInteger.ONE twice
                     for (int i = 2; i < count; ++i) // iterate zero times if count is exactly 2
                     {
                         // starts at 2. Won't exceed the bounds of int, but need a BigInteger to do the mult
                         final BigInteger c = BigInteger.valueOf(i);
                         val = val.multiply(c);
+                        // final boolean twoPower = (c.bitCount() == 1); // nasty linear scan count - https://git.io/vbxrt
+
+                        final boolean isTwoPower = (i & (i - 1)) == 0; // misclassifies where i equals zero, but that's fine.
+                        // https://graphics.stanford.edu/~seander/bithacks.html#DetermineIfPowerOf2
 
                         final int index = countMinusOne - i; // start at the third-to-last element
 
-                        arr[index] = val;
+                        arr[index] = new BigIntAndTwoPowerFlag(val, isTwoPower);
                     }
                 }
             }
@@ -316,9 +331,9 @@ public final class VectorConversions {
 
         public static BigInteger compactVectorToInt_Fast(final int[] compactVector)
         {
-            final BigInteger[] multipliers = genMultipliersList(compactVector.length);
+            final BigIntAndTwoPowerFlag[] multipliers = genMultipliersList(compactVector.length);
 
-            final Stream<String> multipliersStrings = Stream.of(multipliers).map((BigInteger bi) -> bi.toString()); // // DEBUG ONLY
+            final Stream<String> multipliersStrings = Stream.of(multipliers).map((BigIntAndTwoPowerFlag bif) -> bif.bi.toString()); // // DEBUG ONLY
             final Object[] msAgain = multipliersStrings.toArray();
 
 
@@ -329,16 +344,14 @@ public final class VectorConversions {
             // IntStream.range(0, compactVector.length).parallel().mapToObj( (int i) -> multipliers[i].multiply(BigInteger.valueOf(compactVector[i])));
 
             // non parallelised:
-            final Stream<BigInteger> multiplied = IntStream.range(0, compactVector.length).mapToObj( (int i) -> multipliers[i].multiply(BigInteger.valueOf(compactVector[i])));
-
-
+            final Stream<BigInteger> multiplied = IntStream.range(0, compactVector.length).mapToObj( (int i) -> multipliers[i].bi.multiply(BigInteger.valueOf(compactVector[i])));
 
             // following https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html#reduce-T-java.util.function.BinaryOperator-
             final BigInteger totalSum = multiplied.reduce( BigInteger.ZERO, (BigInteger bi, BigInteger bi2) -> bi.add(bi2) );
             // // TODO do we want this to be parallel? How is this thing working anyway? Cascade? Accumulator? Adaptive/hybrid?
 
             // Can't reuse that Stream object, so construct another instance
-            final Stream<BigInteger> multipliedAgain = IntStream.range(0, compactVector.length).mapToObj( (int i) -> multipliers[i].multiply(BigInteger.valueOf(compactVector[i])));
+            final Stream<BigInteger> multipliedAgain = IntStream.range(0, compactVector.length).mapToObj( (int i) -> multipliers[i].bi.multiply(BigInteger.valueOf(compactVector[i])));
             final Object[] mdAgain = multipliedAgain.map((BigInteger bi) -> bi.toString()).toArray(); // // TODO debug only
 
 
