@@ -6,6 +6,7 @@ import java.util.List;
 
 import engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.NumberTooGreatException;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.stream.IntStream;
@@ -283,9 +284,16 @@ public final class VectorConversions {
          */
         private static BigInteger[] genMultipliersList(final int count) // count won't exceed int
         {
-            final ArrayList<BigInteger> list = new ArrayList<BigInteger>(count); // TODO work directly with array
+            final BigInteger[] ret1 = genMultipliersList_Orig(count);
+            final BigInteger[] ret2 = genMultipliersList_Fast(count);
+            final boolean match = Arrays.equals(ret1, ret2);
+            assert(match);
+            return ret1;
+        }
 
-            // // TODO avoid the reverse
+        private static BigInteger[] genMultipliersList_Orig(final int count) // count won't exceed int
+        {
+            final ArrayList<BigInteger> list = new ArrayList<BigInteger>(count);
 
             if (count > 0)
             {
@@ -306,7 +314,38 @@ public final class VectorConversions {
 
             Collections.reverse(list);
 
-            return list.toArray(new BigInteger[count]);
+            final BigInteger[] ret = list.toArray(new BigInteger[count]);
+            return ret;
+        }
+
+        private static BigInteger[] genMultipliersList_Fast(final int count) // count won't exceed int
+        {
+            final BigInteger[] arr = new BigInteger[count];
+
+            if (count > 0)
+            {
+                BigInteger val = BigInteger.ONE; // the val to push
+
+                final int countMinusOne = count - 1;
+                arr[countMinusOne] = val;
+
+                if (count > 1)
+                {
+                    arr[countMinusOne - 1] = val; // yes, we push BigInteger.ONE twice
+                    for (int i = 2; i < count; ++i) // iterate zero times if count is exactly 2
+                    {
+                        // starts at 2. Won't exceed the bounds of int, but need a BigInteger to do the mult
+                        final BigInteger c = BigInteger.valueOf(i);
+                        val = val.multiply(c);
+
+                        final int index = countMinusOne - i; // start at the third-to-last element
+
+                        arr[index] = val;
+                    }
+                }
+            }
+
+            return arr;
         }
 
 
