@@ -113,6 +113,26 @@ public final class TxtShuffleTest {
 	}
 
 
+
+
+        @Test
+        public final void testConversionAndSummation() // i.e. mapping a compact vector to a BigInteger
+        {
+            final int[] compactVector = new int[] {3,0,1,/*last element must be zero*/0};
+
+            final BigInteger bd1 = VectorConversions.compactVectorToInt_Orig(compactVector);
+            final String bd1str = bd1.toString();
+
+            final BigInteger bd2 = VectorConversions.compactVectorToInt_Fast(compactVector);
+            final String bs2str = bd2.toString();
+
+            org.junit.Assert.assertEquals(bd1, bd2);
+        }
+
+
+
+
+
 	@Test
 	public final void encodeIntoDataAndRetrieve_FineGrain() throws IOException, NumberTooGreatException
 	{

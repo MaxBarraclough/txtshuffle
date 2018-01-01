@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.NumberTooGreatException;
+import java.util.ArrayDeque;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 // TODO no-allocate versions of the methods?
 
@@ -221,8 +226,23 @@ public final class VectorConversions {
 	 * http://www.geekviewpoint.com/java/numbers/permutation_index
 	 * TODO equivalent to http://mathworld.wolfram.com/PermutationIndex.html ???
 	 */
-	public static BigInteger compactVectorToInt(final int[] compactVector)
-	{
+	public static BigInteger compactVectorToInt(final int[] compactVector) {
+            final BigInteger correctVal = compactVectorToInt_Orig(compactVector);
+            final String correctValStr = correctVal.toString();
+
+            final BigInteger checkThisVal = compactVectorToInt_Fast(compactVector);
+            final String checkThisValStr = checkThisVal.toString();
+
+            if (!correctVal.equals(checkThisVal))
+            {
+                assert(false);
+            }
+
+            return correctVal;
+        }
+
+
+        public static BigInteger compactVectorToInt_Orig(final int[] compactVector) {
 		assert(0 == compactVector[compactVector.length - 1]); // TODO should conditionally throw?
 
 		assert(isValidCompactVector(compactVector));
@@ -233,8 +253,9 @@ public final class VectorConversions {
 		// int acc = 0;
 		BigInteger acc = BigInteger.ZERO;
 
+                // Java array length has type int - no real need to use BigInteger except
+                // that BigInteger#multiply(1) only accepts BigInteger
 		BigInteger card = BigInteger.valueOf(compactVector.length);
-		// int card = compactVector.length;
 		// cardinality of the set of 'options' is initially the length of the vector
                 // Remember each interval starts at zero.
 
@@ -251,8 +272,81 @@ public final class VectorConversions {
 			// --card;
 			card = card.subtract(BigInteger.ONE);
 		}
+
 		return acc;
 	}
+
+
+        /**
+         * @param count
+         * @return
+         */
+        private static BigInteger[] genMultipliersList(final int count) // count won't exceed int
+        {
+            final ArrayList<BigInteger> list = new ArrayList<BigInteger>(count); // TODO work directly with array
+
+            // // TODO avoid the reverse
+
+            if (count > 0)
+            {
+                BigInteger val = BigInteger.ONE; // the val to push
+                list.add(val);
+                if (count > 1)
+                {
+                    list.add(val); // yes, we push BigInteger.ONE twice
+                    for (int i = 2; i < count; ++i) // iterate zero times if count is exactly 2
+                    {
+                        // starts at 2. Won't exceed the bounds of int, but need a BigInteger to do the mult
+                        final BigInteger c = BigInteger.valueOf(i);
+                        val = val.multiply(c);
+                        list.add(val);
+                    }
+                }
+            }
+
+            Collections.reverse(list);
+
+            return list.toArray(new BigInteger[count]);
+        }
+
+
+
+        public static BigInteger compactVectorToInt_Fast(final int[] compactVector)
+        {
+            final BigInteger[] multipliers = genMultipliersList(compactVector.length);
+
+            final Stream<String> multipliersStrings = Stream.of(multipliers).map((BigInteger bi) -> bi.toString()); // // DEBUG ONLY
+            final Object[] msAgain = multipliersStrings.toArray();
+
+
+            // multipliers.parallelStream().map( (BigInteger bi) -> null ); // nope, can't access indices
+
+            // second arg of #range is the *exclusive* val
+            // do we need that #parallel call? // // TODO
+            // IntStream.range(0, compactVector.length).parallel().mapToObj( (int i) -> multipliers[i].multiply(BigInteger.valueOf(compactVector[i])));
+
+            // non parallelised:
+            final Stream<BigInteger> multiplied = IntStream.range(0, compactVector.length).mapToObj( (int i) -> multipliers[i].multiply(BigInteger.valueOf(compactVector[i])));
+
+
+
+            // following https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html#reduce-T-java.util.function.BinaryOperator-
+            final BigInteger totalSum = multiplied.reduce( BigInteger.ZERO, (BigInteger bi, BigInteger bi2) -> bi.add(bi2) );
+            // // TODO do we want this to be parallel? How is this thing working anyway? Cascade? Accumulator? Adaptive/hybrid?
+
+            // Can't reuse that Stream object, so construct another instance
+            final Stream<BigInteger> multipliedAgain = IntStream.range(0, compactVector.length).mapToObj( (int i) -> multipliers[i].multiply(BigInteger.valueOf(compactVector[i])));
+            final Object[] mdAgain = multipliedAgain.map((BigInteger bi) -> bi.toString()).toArray(); // // TODO debug only
+
+
+
+            // final BigInteger[] resultsAsArr = results.toArray( (int size) -> new BigInteger[size] );
+            // yup, different from ArrayList#toArray https://stackoverflow.com/a/23079174
+
+            return totalSum;
+        }
+
+
 
 
 
