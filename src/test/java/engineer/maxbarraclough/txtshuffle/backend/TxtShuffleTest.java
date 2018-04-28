@@ -12,6 +12,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import engineer.maxbarraclough.txtshuffle.backend.TxtShuffle.NumberTooGreatException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public final class TxtShuffleTest {
 
@@ -199,5 +205,130 @@ public final class TxtShuffleTest {
 
 		org.junit.Assert.assertEquals(secretNum, retrievedNum);
 	}
+
+// https://graphics.stanford.edu/~seander/bithacks.html#IntegerLogDeBruijn
+    private static final int[] MAGIC = new int[]{
+        0, 1, 28, 2, 29, 14, 24, 3, 30, 22, 20, 15, 25, 17, 4, 8,
+        31, 27, 13, 23, 21, 19, 16, 7, 26, 12, 18, 6, 11, 5, 10, 9
+    };
+
+    public static int log2of2power(int x) {
+        final int index = (x * 0x077CB531) >>> 27;
+        final int r = MAGIC[index];
+        return r;
+    }
+
+
+        // // TODO relocate, perhaps even to its own test class
+
+	@Test
+	public final void encodeChunky() throws IOException, NumberTooGreatException
+	{
+		final BigInteger secretNum = new BigInteger( "3" );
+				// BigInteger.valueOf(1233211230696474742L);
+
+		final String[] strs =
+                        TxtShuffle.readFileIntoStringArr("src/test/java/engineer/maxbarraclough/txtshuffle/backend/example2.txt");
+
+		final int[] compact =
+				VectorConversions.intToCompactVector(
+				  strs.length,
+				  secretNum
+				);
+
+		final int[] isvFromCompact = VectorConversions.compactToIsv(compact);
+
+		// final int[] isvForFilesOrder = TxtShuffle.findSortingIsv(strs); // NO! not needed for the encode direction, only for decode!
+
+		final String[] strsSorted = strs.clone();
+		java.util.Arrays.sort(strsSorted);
+
+		final String[] strsEncodingNum = TxtShuffle.applyIsvToStringArr(strsSorted, isvFromCompact);
+
+		{
+			final boolean shouldBeFalse = java.util.Arrays.equals(strs, strsEncodingNum);
+			org.junit.Assert.assertFalse(shouldBeFalse);
+		}
+
+		{
+			final boolean shouldBeFalse = java.util.Arrays.equals(strsSorted, strsEncodingNum);
+			org.junit.Assert.assertFalse(shouldBeFalse);
+		}
+
+// Now let's go back and retrieve the number
+
+//		final int[] retrievedSortingIsv = TxtShuffle.findSortingIsv_AVOID(strsEncodingNum);
+//		final int[] retrievedUseful = TxtShuffle.invertIsv(retrievedSortingIsv);
+
+		final int[] foundSortingSv = TxtShuffle.findSortingSv(strsEncodingNum);
+
+		org.junit.Assert.assertArrayEquals(foundSortingSv, isvFromCompact);
+
+		final int[] retrievedCompact = VectorConversions.isvToCompact(foundSortingSv);
+
+		org.junit.Assert.assertArrayEquals(compact, retrievedCompact);
+
+		final BigInteger retrievedNum = VectorConversions.compactVectorToInt(retrievedCompact);
+
+		org.junit.Assert.assertEquals(secretNum, retrievedNum);
+
+                final byte[] retrievedNumBytes = retrievedNum.toByteArray(); // big endian
+
+
+
+                // // Yup, real code in a test. The horror!
+
+//                final ArrayList<Byte> bytesAl = new ArrayList<>(); // big endian
+
+BitSet bs = new BitSet();
+
+                final VectorConversions.MultiplierVal[] mults = VectorConversions.genMultipliersList(isvFromCompact.length);
+
+                int stintStartingIndex = 0;
+                for (int i = 0; i != isvFromCompact.length; ++i)
+                {
+                    final boolean twoPower = mults[i].stepwiseMultIsTwoPower();
+                    if (twoPower)
+                    {
+                        final BigInteger bigSum =
+IntStream.range(stintStartingIndex, i+1/*it's exclusive*/).map((int j) -> isvFromCompact[j])
+        .mapToObj((int k ) -> BigInteger.valueOf(k))
+        .reduce(BigInteger.ZERO, (BigInteger bi, BigInteger bi2) -> bi.add(bi2));
+
+                        final BigInteger dividedOff = bigSum.divide(mults[i].bi);
+
+                        // if the multiplier is 8 that means we .... uh.... THAT TELLS US HOW MANY ARE COMING, NOT HOW MANY TO WRITE!
+                        // how many to write DEPENDS, right?
+                        final int numBitsToSet = mults[i].bi.getLowestSetBit(); // log2of2power();
+
+//                       final byte[] bytes = dividedOff.toByteArray();
+
+//                        final Byte[] bytesBoxed = new Byte[bytes.length];
+//                        for (int d = 0; d != bytes.length; ++d)
+//                        {
+//                            bytesBoxed[d] = bytes[d];
+//                        }
+//
+//                        bytesAl.addAll(Arrays.asList(bytesBoxed));
+
+//final BigInteger totalSum = multiplied.reduce( BigInteger.ZERO, (BigInteger bi, BigInteger bi2) -> bi.add(bi2) );
+                    }
+                    else {
+                        //
+                    }
+                }
+
+               final Byte[] retrievedNumBytesBoxed = new Byte[retrievedNumBytes.length];
+               for (int e = 0; e != retrievedNumBytes.length; ++e)
+               {
+                   retrievedNumBytesBoxed[e] = retrievedNumBytes[e];
+               }
+
+            final List<Byte> retrievedNumBytesBoxed_List = Arrays.asList(retrievedNumBytesBoxed);
+            final boolean equal = bytesAl.equals(retrievedNumBytesBoxed_List);
+            org.junit.Assert.assertTrue(equal);
+	}
+
+
 
 }

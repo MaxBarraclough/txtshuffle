@@ -277,15 +277,23 @@ public final class VectorConversions {
 		return acc;
 	}
 
-        private static final class BigIntAndTwoPowerFlag
+        public static final class MultiplierVal
         {
             public final BigInteger bi;
-            public final boolean isTwoPower;
+            public final int stepwiseMultiplier;
+            // public final boolean isTwoPower; // nope, use a method and compute at the time
 
-            public BigIntAndTwoPowerFlag(final BigInteger b, final boolean f)
+            public MultiplierVal(final BigInteger b, final int s)
             {
                 this.bi = b;
-                this.isTwoPower = f;
+                this.stepwiseMultiplier = s;
+            }
+
+            public boolean stepwiseMultIsTwoPower()
+            {
+                final boolean isTwoPower = (this.stepwiseMultiplier & (this.stepwiseMultiplier - 1)) == 0; // misclassifies where i equals zero, but that's fine.
+                // https://graphics.stanford.edu/~seander/bithacks.html#DetermineIfPowerOf2
+                return isTwoPower;
             }
         }
 
@@ -293,33 +301,33 @@ public final class VectorConversions {
          * @param count
          * @return
          */
-        private static BigIntAndTwoPowerFlag[] genMultipliersList(final int count) // count won't exceed int
+        public static MultiplierVal[] genMultipliersList(final int count) // count won't exceed int
         {
-            final BigIntAndTwoPowerFlag[] arr = new BigIntAndTwoPowerFlag[count];
+            final MultiplierVal[] arr = new MultiplierVal[count];
 
             if (count > 0)
             {
                 BigInteger val = BigInteger.ONE; // the val to push
 
                 final int countMinusOne = count - 1;
-                arr[countMinusOne] = new BigIntAndTwoPowerFlag(val, false);
+                arr[countMinusOne] = new MultiplierVal(val, -1); // mark special with -1
 
                 if (count > 1)
                 {
-                    arr[countMinusOne - 1] = new BigIntAndTwoPowerFlag(val, true); // yes, we push BigInteger.ONE twice
+                    arr[countMinusOne - 1] = new MultiplierVal(val, 1); // yes, we push BigInteger.ONE twice
                     for (int i = 2; i < count; ++i) // iterate zero times if count is exactly 2
                     {
                         // starts at 2. Won't exceed the bounds of int, but need a BigInteger to do the mult
                         final BigInteger c = BigInteger.valueOf(i);
                         val = val.multiply(c);
-                        // final boolean twoPower = (c.bitCount() == 1); // nasty linear scan count - https://git.io/vbxrt
 
-                        final boolean isTwoPower = (i & (i - 1)) == 0; // misclassifies where i equals zero, but that's fine.
+                        // final boolean twoPower = (c.bitCount() == 1); // nasty linear scan count - https://git.io/vbxrt
+                        // final boolean isTwoPower = (i & (i - 1)) == 0; // misclassifies where i equals zero, but that's fine.
                         // https://graphics.stanford.edu/~seander/bithacks.html#DetermineIfPowerOf2
 
                         final int index = countMinusOne - i; // start at the third-to-last element
 
-                        arr[index] = new BigIntAndTwoPowerFlag(val, isTwoPower);
+                        arr[index] = new MultiplierVal(val, i);
                     }
                 }
             }
@@ -331,9 +339,9 @@ public final class VectorConversions {
 
         public static BigInteger compactVectorToInt_Fast(final int[] compactVector)
         {
-            final BigIntAndTwoPowerFlag[] multipliers = genMultipliersList(compactVector.length);
+            final MultiplierVal[] multipliers = genMultipliersList(compactVector.length);
 
-            final Stream<String> multipliersStrings = Stream.of(multipliers).map((BigIntAndTwoPowerFlag bif) -> bif.bi.toString()); // // DEBUG ONLY
+            final Stream<String> multipliersStrings = Stream.of(multipliers).map((MultiplierVal m) -> m.bi.toString()); // // DEBUG ONLY
             final Object[] msAgain = multipliersStrings.toArray();
 
 
@@ -353,7 +361,6 @@ public final class VectorConversions {
             // Can't reuse that Stream object, so construct another instance
             final Stream<BigInteger> multipliedAgain = IntStream.range(0, compactVector.length).mapToObj( (int i) -> multipliers[i].bi.multiply(BigInteger.valueOf(compactVector[i])));
             final Object[] mdAgain = multipliedAgain.map((BigInteger bi) -> bi.toString()).toArray(); // // TODO debug only
-
 
 
             // final BigInteger[] resultsAsArr = results.toArray( (int size) -> new BigInteger[size] );

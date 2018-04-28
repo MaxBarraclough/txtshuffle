@@ -501,7 +501,7 @@ public final class FXMLController implements Initializable {
      */
     @FXML
     private void handleGoEncodeButtonAction(final ActionEvent event) {
-        final byte[] msgBytes = Model.INSTANCE.getMessageBytes();
+        final byte[] msgBytes = Model.INSTANCE.getMessageBytes(); // TODO rename that method and avoid double-calling it
         final String[] ds = Model.INSTANCE.getDataSet();
 
         try {
